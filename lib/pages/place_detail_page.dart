@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:travel_in_chiangmai/models/data_model.dart';
-import 'package:travel_in_chiangmai/widgets/detail_bottom_bar.dart';
+import 'package:travel_in_chiangmai/models/album.dart'; // ✅ New API model
 import 'package:travel_in_chiangmai/widgets/detail_overview_tab.dart';
 import 'package:travel_in_chiangmai/widgets/detail_place_image_carousel.dart';
 import 'package:travel_in_chiangmai/widgets/detail_place_tab_bar.dart';
 import 'package:travel_in_chiangmai/widgets/detail_review_tab.dart';
+import 'package:travel_in_chiangmai/config.dart';
 
 class PlaceDetailPage extends StatefulWidget {
-  final PopularPlaces place;
+  final Album album; // ✅ replace PopularPlaces with Album
   final int initialIndex;
 
   const PlaceDetailPage({
     super.key,
-    required this.place,
+    required this.album,
     required this.initialIndex,
   });
 
@@ -46,21 +46,6 @@ class _PlaceDetailPageState extends State<PlaceDetailPage>
     final theme = Theme.of(context);
 
     return Scaffold(
-      // bottomNavigationBar: Container(
-      //   decoration: BoxDecoration(
-      //     border: Border(top: BorderSide(color: theme.dividerColor)),
-      //     color: theme.colorScheme.surface,
-      //   ),
-      //   child: BottomAppBar(
-      //     elevation: 0,
-      //     color: theme.colorScheme.surface,
-      //     // child: SizedBox(
-      //     //   height: 72,
-      //     //   child: DetailBottomBar(price: widget.place.price.toString()),
-      //     // ),
-      //   ),
-      // ),
-
       body: NestedScrollView(
         headerSliverBuilder: (context, innerBoxIsScrolled) => [
           SliverAppBar(
@@ -78,29 +63,47 @@ class _PlaceDetailPageState extends State<PlaceDetailPage>
               ),
             ],
             title: Text(
-              widget.place.name,
+              widget.album.name, // ✅ album name from API
               style: theme.appBarTheme.titleTextStyle,
             ),
           ),
           SliverToBoxAdapter(
-            child: DetailPlaceImageCarousel(
-              place: widget.place,
-              pageController: _pageController,
-              currentIndex: _currentIndex,
-              onPageChanged: (index) {
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  AppConfig.storageUrl + widget.album.coverImage, // ✅ use storageUrl from config
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 220,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    height: 220,
+                    color: Colors.grey[300],
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.broken_image, size: 48, color: Colors.grey),
+                  ),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      height: 220,
+                      alignment: Alignment.center,
+                      child: const CircularProgressIndicator(),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
+
           DetailPlaceTabBar(tabController: _tabController),
         ],
         body: TabBarView(
           controller: _tabController,
           children: [
-            DetailOverviewTab(place: widget.place, currentIndex: _currentIndex),
-            const DetailReviewTab(),
+             //DetailOverviewTab(album: widget.album, currentIndex: _currentIndex),
+             //const DetailReviewTab(),
+             const DetailReviewTab(),
           ],
         ),
       ),

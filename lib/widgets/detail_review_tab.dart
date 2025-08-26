@@ -35,32 +35,7 @@ class DetailReviewTab extends StatelessWidget {
         ],
       ),
     );
-    // return SafeArea(
-    //   top: false,
-    //   bottom: false,
-    //   child: SingleChildScrollView(
-    //     padding: const EdgeInsets.all(12),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Text("User Reviews:", style: TextStyle(fontWeight: FontWeight.bold)),
-    //         SizedBox(height: 12),
-            
-    //         Column(
-    //           children: List.generate(userReviews.length,(index) {
-    //             final review = userReviews[index];
-    //             return ReviewTile(
-    //               name: review.name, 
-    //               comment: review.comment, 
-    //               photo: review.photo,
-    //               );
-    //           }),
-    //         ),
-
-    //       ],
-    //     ),
-    //   ),
-    // );
+    
   }
 
   

@@ -25,7 +25,7 @@ class HomeRecommendPackageSection extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "နောက်ဆုံးဟောထားသောတရားများ",
+                "နောက်ဆုံးထွက် Items များ",
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontSize: sectionTitleFontSize,
                   fontWeight: textFontWeight,

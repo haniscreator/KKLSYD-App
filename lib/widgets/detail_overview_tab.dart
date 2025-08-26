@@ -17,32 +17,6 @@ class DetailOverviewTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // return SingleChildScrollView(
-    //   padding: EdgeInsets.only(bottom: 80),
-    //   child: Column(
-    //     crossAxisAlignment: CrossAxisAlignment.start,
-    //     children: [
-    //       AnimatedOpacity(
-    //         opacity: 1.0,
-    //         duration: Duration(microseconds: 600),
-
-    //         child: Padding(
-    //           padding: EdgeInsets.all(16),
-    //           child: Column(
-    //             crossAxisAlignment: CrossAxisAlignment.start,
-    //             children: [
-    //               SizedBox(height: 12),
-    //               Text(
-    //                 albumDesc,
-    //                 style: TextStyle(fontSize: 14),
-    //               ),
-    //             ],
-    //           ),
-    //         ),
-    //       ),
-    //     ],
-    //   ),
-    // );
 
     return SafeArea(
       top: false,
@@ -52,8 +26,6 @@ class DetailOverviewTab extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //Text("User Reviews:", style: TextStyle(fontWeight: FontWeight.bold)),
-            //SizedBox(height: 12),
             
             Column(
               children: List.generate(userReviews.length,(index) {

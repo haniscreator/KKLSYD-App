@@ -1,43 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:travel_in_chiangmai/animations/popin_card_images.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
-import 'package:travel_in_chiangmai/models/data_model.dart';
-
+import 'package:travel_in_chiangmai/models/album.dart';
 import 'package:travel_in_chiangmai/pages/place_detail_page.dart';
 
 class HomePopularPlaceCard extends StatelessWidget {
-  //final Places place;
-  final PopularPlaces place;
+  final Album album; // ✅ now Album, not PopularPlaces
 
-  const HomePopularPlaceCard({super.key, required this.place});
+  const HomePopularPlaceCard({super.key, required this.album});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-
       onTap: () {
         // Navigate to detail page on tap
         Navigator.push(
           context,
           MaterialPageRoute(
-            //builder: (context) => PlaceDetailPage(place: place),
-            builder: (context) => PlaceDetailPage(place: place, initialIndex: 0),
+            builder: (context) =>
+                PlaceDetailPage(album: album, initialIndex: 0), // ⚠️ PlaceDetailPage must also accept Album now
           ),
         );
       },
-
       child: Hero(
-        tag: '${place.name}_image_0',
+        tag: '${album.name}_image',
         child: Container(
           width: 320,
-          margin: EdgeInsets.only(left: 12),
+          margin: const EdgeInsets.only(left: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
                 color: Color.fromRGBO(0, 0, 0, 0.25),
                 blurRadius: 8,
-                offset: const Offset(0, 4),
+                offset: Offset(0, 4),
               ),
             ],
           ),
@@ -46,20 +42,21 @@ class HomePopularPlaceCard extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-            
+                // ✅ Cover image from API (network)
                 PopInCardImages(
-                  imagePath: place.image![0],
-                  delay: Duration(milliseconds: 150), // 100ms staggered delay
+                  imagePath: album.coverImage,
+                  isNetwork: true, // 👈 we will add this param in PopInCardImages
+                  delay: const Duration(milliseconds: 150),
                 ),
-      
+
                 // Overlay with text and icons
                 Positioned(
                   bottom: 0,
                   right: 0,
                   left: 0,
                   child: Container(
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.vertical(
                         bottom: Radius.circular(16),
                       ),
@@ -68,7 +65,7 @@ class HomePopularPlaceCard extends StatelessWidget {
                         end: Alignment.bottomCenter,
                         colors: [
                           Colors.transparent,
-                          const Color.fromARGB(230, 11, 11, 11),
+                          Color.fromARGB(230, 11, 11, 11),
                         ],
                       ),
                     ),
@@ -76,28 +73,38 @@ class HomePopularPlaceCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          place.name,
-                          style: TextStyle(color: commonWhiteColor, fontSize: cardTitleFontSize),
+                          album.name,
+                          style: const TextStyle(
+                            color: commonWhiteColor,
+                            fontSize: cardTitleFontSize,
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            // Location
                             Row(
                               children: [
-                                Icon(Icons.location_on, color: commonWhiteColor, size: normalTextFontSize),
+                                const Icon(Icons.location_on,
+                                    color: commonWhiteColor,
+                                    size: normalTextFontSize),
                                 Text(
-                                  place.location,
-                                  style: TextStyle(color: commonWhiteColor, fontSize: normalTextFontSize),
+                                  album.location,
+                                  style: const TextStyle(
+                                      color: commonWhiteColor,
+                                      fontSize: normalTextFontSize),
                                 ),
                               ],
                             ),
+                            // Item count
                             Row(
                               children: [
-                                Icon(Icons.library_music, size: 22, color: Colors.white),
-                                SizedBox(width: 5),
+                                const Icon(Icons.library_music,
+                                    size: 22, color: Colors.white),
+                                const SizedBox(width: 5),
                                 Text(
-                                  "10",
-                                  style: TextStyle(
+                                  "${album.itemCount}", // ✅ dynamic from API
+                                  style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: commonWhiteColor,
