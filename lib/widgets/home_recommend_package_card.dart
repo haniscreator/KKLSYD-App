@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
-import 'package:travel_in_chiangmai/models/data_model.dart';
+import 'package:travel_in_chiangmai/models/item.dart';
 
 class HomeRecommendPackageCard extends StatefulWidget {
-  final AllPackages package;
+  final Item item;
 
-  const HomeRecommendPackageCard({super.key, required this.package});
+  const HomeRecommendPackageCard({super.key, required this.item});
 
   @override
-  State<HomeRecommendPackageCard> createState() => _HomeRecommendPackageCardState();
+  State<HomeRecommendPackageCard> createState() =>
+      _HomeRecommendPackageCardState();
 }
 
-class _HomeRecommendPackageCardState extends State<HomeRecommendPackageCard> with SingleTickerProviderStateMixin {
+class _HomeRecommendPackageCardState extends State<HomeRecommendPackageCard>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _opacityAnimation;
@@ -67,7 +69,7 @@ class _HomeRecommendPackageCardState extends State<HomeRecommendPackageCard> wit
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
-    final package = widget.package;
+    final item = widget.item;
 
     return GestureDetector(
       onTapDown: _onTapDown,
@@ -101,7 +103,7 @@ class _HomeRecommendPackageCardState extends State<HomeRecommendPackageCard> wit
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.asset(
-                      package.image?.first ?? '',
+                      "assets/images/thumbnail/thumbnail4.png", // ✅ now loads from assets
                       width: 90,
                       height: 90,
                       fit: BoxFit.cover,
@@ -113,7 +115,9 @@ class _HomeRecommendPackageCardState extends State<HomeRecommendPackageCard> wit
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          package.name,
+                          item.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: theme.textTheme.bodyLarge?.copyWith(
                             fontWeight: textFontWeight,
                             fontSize: normalTextFontSize,
@@ -122,10 +126,11 @@ class _HomeRecommendPackageCardState extends State<HomeRecommendPackageCard> wit
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            Icon(Icons.location_on, size: 16, color: theme.hintColor),
+                            Icon(Icons.folder_rounded,
+                                size: 16, color: theme.hintColor),
                             const SizedBox(width: 4),
                             Text(
-                              package.location,
+                              item.album,
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: theme.hintColor,
                                 fontSize: smallTextFontSize,
@@ -134,45 +139,19 @@ class _HomeRecommendPackageCardState extends State<HomeRecommendPackageCard> wit
                           ],
                         ),
                         const SizedBox(height: 4),
-                        // Row(
-                        //   children: [
-                        //     Text(
-                        //       package.rate.toString(),
-                        //       style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
-                        //     ),
-                        //     const SizedBox(width: 4),
-                        //     Text(
-                        //       ' (${package.review} reviews)',
-                        //       style: theme.textTheme.bodySmall?.copyWith(
-                        //         color: theme.hintColor,
-                        //         fontSize: smallTextFontSize,
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
+                        Text(
+                          item.description.isNotEmpty
+                              ? item.description
+                              : "No description available",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            fontSize: smallTextFontSize,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  // Column(
-                  //   crossAxisAlignment: CrossAxisAlignment.end,
-                  //   children: [
-                  //     Text(
-                  //       '\$${package.price}',
-                  //       style: theme.textTheme.bodyMedium?.copyWith(
-                  //         fontWeight: FontWeight.bold,
-                  //         fontSize: 16,
-                  //         color: primaryBackgroundColor,
-                  //       ),
-                  //     ),
-                  //     Text(
-                  //       '/Person',
-                  //       style: theme.textTheme.bodySmall?.copyWith(
-                  //         color: theme.hintColor,
-                  //         fontSize: smallTextFontSize,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
                 ],
               ),
             ),

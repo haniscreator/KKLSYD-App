@@ -102,7 +102,7 @@ class _PlaceDetailPageState extends State<PlaceDetailPage>
           controller: _tabController,
           children: [
              DetailOverviewTab(albumId: widget.album.id),
-             const DetailReviewTab(),
+             DetailReviewTab(description: widget.album.description),
           ],
         ),
       ),
