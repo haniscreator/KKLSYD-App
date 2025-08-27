@@ -15,12 +15,42 @@ class HomePopularPlaceSection extends StatefulWidget {
 
 class _HomePopularPlaceSectionState extends State<HomePopularPlaceSection> {
   final AlbumService _albumService = AlbumService();
-  late Future<List<Album>> futureAlbums;
+  List<Album> _albums = [];
+  bool _isLoading = true;
+  bool _hasError = false;
 
   @override
   void initState() {
     super.initState();
-    futureAlbums = _albumService.fetchAlbums();
+    _loadAlbums();
+  }
+
+  Future<void> _loadAlbums() async {
+    try {
+      // 1️⃣ Try to get cached albums first (fast load)
+      final cachedAlbums = await _albumService.fetchAlbums();
+      if (mounted) {
+        setState(() {
+          _albums = cachedAlbums;
+          _isLoading = false;
+        });
+      }
+
+      // 2️⃣ Refresh in background (force API call)
+      final freshAlbums = await _albumService.fetchAlbums(forceRefresh: true);
+      if (mounted && freshAlbums.isNotEmpty) {
+        setState(() {
+          _albums = freshAlbums;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _hasError = true;
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -56,18 +86,17 @@ class _HomePopularPlaceSectionState extends State<HomePopularPlaceSection> {
           ),
         ),
 
-        // Albums List from API
+        // Albums List (Shimmer / Data / Error)
         SizedBox(
           height: 210,
-          child: FutureBuilder<List<Album>>(
-            future: futureAlbums,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
+          child: Builder(
+            builder: (context) {
+              if (_isLoading && _albums.isEmpty) {
                 // 🔥 Shimmer Skeleton Loader
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: 4, // number of shimmer placeholders
+                  itemCount: 4,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.only(right: 12),
@@ -84,20 +113,19 @@ class _HomePopularPlaceSectionState extends State<HomePopularPlaceSection> {
                     );
                   },
                 );
-              } else if (snapshot.hasError) {
-                return Center(child: Text("Error: ${snapshot.error}"));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              } else if (_hasError && _albums.isEmpty) {
+                return const Center(child: Text("Error loading albums"));
+              } else if (_albums.isEmpty) {
                 return const Center(child: Text("No albums found"));
               }
 
-              final albums = snapshot.data!;
-
+              // ✅ Show albums (cached or fresh)
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: albums.length,
+                itemCount: _albums.length,
                 itemBuilder: (context, index) {
-                  final album = albums[index];
+                  final album = _albums[index];
                   return HomePopularPlaceCard(album: album);
                 },
               );

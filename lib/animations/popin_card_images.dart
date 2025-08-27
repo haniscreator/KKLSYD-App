@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:travel_in_chiangmai/config.dart';
 
 class PopInCardImages extends StatefulWidget {
@@ -38,20 +39,17 @@ class _PopInCardImagesState extends State<PopInCardImages>
   @override
   Widget build(BuildContext context) {
     final imageWidget = widget.isNetwork
-        ? Image.network(
-            AppConfig.storageUrl + widget.imagePath,
+        ? CachedNetworkImage(
+            imageUrl: AppConfig.storageUrl + widget.imagePath,
             fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Image.asset(
-              "assets/images/default_cover.png", // ✅ fallback
+            placeholder: (context, url) => Image.asset(
+              "assets/images/default_cover.png",
               fit: BoxFit.cover,
             ),
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Image.asset(
-                "assets/images/default_cover.png", // ✅ show default while loading
-                fit: BoxFit.cover,
-              );
-            },
+            errorWidget: (context, url, error) => Image.asset(
+              "assets/images/default_cover.png",
+              fit: BoxFit.cover,
+            ),
           )
         : Image.asset(
             widget.imagePath.isNotEmpty
