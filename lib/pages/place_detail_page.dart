@@ -101,8 +101,7 @@ class _PlaceDetailPageState extends State<PlaceDetailPage>
         body: TabBarView(
           controller: _tabController,
           children: [
-             //DetailOverviewTab(album: widget.album, currentIndex: _currentIndex),
-             //const DetailReviewTab(),
+             DetailOverviewTab(albumId: widget.album.id),
              const DetailReviewTab(),
           ],
         ),
