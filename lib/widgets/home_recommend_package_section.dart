@@ -3,6 +3,7 @@ import 'package:travel_in_chiangmai/const/const.dart';
 import 'package:travel_in_chiangmai/models/item.dart';
 import 'package:travel_in_chiangmai/services/item_service.dart';
 import 'package:travel_in_chiangmai/widgets/home_recommend_package_card.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class HomeRecommendPackageSection extends StatefulWidget {
   const HomeRecommendPackageSection({super.key});
@@ -20,7 +21,6 @@ class _HomeRecommendPackageSectionState
   @override
   void initState() {
     super.initState();
-    // ✅ Fetch latest items (no album filter => 0 = all albums)
     _futureItems = _itemService.fetchItems(
       0,
       perPage: 5,
@@ -64,11 +64,63 @@ class _HomeRecommendPackageSectionState
           future: _futureItems,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: CircularProgressIndicator(),
-                ),
+              // 🔥 Shimmer Loading Placeholder
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                itemCount: 3, // number of shimmer cards
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Shimmer(
+                      child: Container(
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            // Thumbnail shimmer
+                            Container(
+                              width: 100,
+                              height: 100,
+                              margin: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[400],
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            // Text shimmer
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: 15,
+                                      width: double.infinity,
+                                      margin: const EdgeInsets.only(bottom: 10),
+                                      color: Colors.grey[400],
+                                    ),
+                                    Container(
+                                      height: 15,
+                                      width: 150,
+                                      color: Colors.grey[400],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
               );
             } else if (snapshot.hasError) {
               return Padding(

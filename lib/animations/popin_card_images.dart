@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_in_chiangmai/config.dart';
 
-
 class PopInCardImages extends StatefulWidget {
   final String imagePath;
   final Duration delay;
@@ -23,8 +22,6 @@ class _PopInCardImagesState extends State<PopInCardImages>
   double _opacity = 0;
   double _scale = 0.9;
 
-  //static const String storageUrl = "https://www.ads.panacea-soft.com/storage/";
-
   @override
   void initState() {
     super.initState();
@@ -42,24 +39,24 @@ class _PopInCardImagesState extends State<PopInCardImages>
   Widget build(BuildContext context) {
     final imageWidget = widget.isNetwork
         ? Image.network(
-            AppConfig.storageUrl + widget.imagePath, // ✅ prepend storage URL
+            AppConfig.storageUrl + widget.imagePath,
             fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Container(
-              color: Colors.grey[300],
-              alignment: Alignment.center,
-              child: const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+            errorBuilder: (context, error, stackTrace) => Image.asset(
+              "assets/images/default_cover.png", // ✅ fallback
+              fit: BoxFit.cover,
             ),
             loadingBuilder: (context, child, loadingProgress) {
               if (loadingProgress == null) return child;
-              return Container(
-                color: Colors.grey[200],
-                alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
+              return Image.asset(
+                "assets/images/default_cover.png", // ✅ show default while loading
+                fit: BoxFit.cover,
               );
             },
           )
         : Image.asset(
-            widget.imagePath,
+            widget.imagePath.isNotEmpty
+                ? widget.imagePath
+                : "assets/images/default_cover.png", // ✅ fallback for asset
             fit: BoxFit.cover,
           );
 

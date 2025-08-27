@@ -3,6 +3,7 @@ import 'package:travel_in_chiangmai/models/album.dart';
 import 'package:travel_in_chiangmai/services/album_service.dart';
 import 'package:travel_in_chiangmai/widgets/home_popular_place_card.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class HomePopularPlaceSection extends StatefulWidget {
   const HomePopularPlaceSection({super.key});
@@ -62,7 +63,27 @@ class _HomePopularPlaceSectionState extends State<HomePopularPlaceSection> {
             future: futureAlbums,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
+                // 🔥 Shimmer Skeleton Loader
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: 4, // number of shimmer placeholders
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: Shimmer(
+                        child: Container(
+                          width: 320,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
               } else if (snapshot.hasError) {
                 return Center(child: Text("Error: ${snapshot.error}"));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -78,7 +99,6 @@ class _HomePopularPlaceSectionState extends State<HomePopularPlaceSection> {
                 itemBuilder: (context, index) {
                   final album = albums[index];
                   return HomePopularPlaceCard(album: album);
-                  // ⚠️ NOTE: HomePopularPlaceCard must now accept Album instead of PopularPlaces
                 },
               );
             },
