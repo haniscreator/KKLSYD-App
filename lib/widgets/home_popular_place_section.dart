@@ -9,11 +9,10 @@ class HomePopularPlaceSection extends StatefulWidget {
   const HomePopularPlaceSection({super.key});
 
   @override
-  State<HomePopularPlaceSection> createState() =>
-      _HomePopularPlaceSectionState();
+  State<HomePopularPlaceSection> createState() => HomePopularPlaceSectionState();
 }
 
-class _HomePopularPlaceSectionState extends State<HomePopularPlaceSection> {
+class HomePopularPlaceSectionState extends State<HomePopularPlaceSection> {
   final AlbumService _albumService = AlbumService();
   List<Album> _albums = [];
   bool _isLoading = true;
@@ -25,22 +24,27 @@ class _HomePopularPlaceSectionState extends State<HomePopularPlaceSection> {
     _loadAlbums();
   }
 
-  Future<void> _loadAlbums() async {
+  Future<void> reloadAlbums() async {
+    await _loadAlbums(forceRefresh: true);
+  }
+
+  Future<void> _loadAlbums({bool forceRefresh = false}) async {
     try {
-      // 1️⃣ Try to get cached albums first (fast load)
-      final cachedAlbums = await _albumService.fetchAlbums();
-      if (mounted) {
-        setState(() {
-          _albums = cachedAlbums;
-          _isLoading = false;
-        });
+      if (!forceRefresh) {
+        final cachedAlbums = await _albumService.fetchAlbums();
+        if (mounted) {
+          setState(() {
+            _albums = cachedAlbums;
+            _isLoading = false;
+          });
+        }
       }
 
-      // 2️⃣ Refresh in background (force API call)
       final freshAlbums = await _albumService.fetchAlbums(forceRefresh: true);
       if (mounted && freshAlbums.isNotEmpty) {
         setState(() {
           _albums = freshAlbums;
+          _isLoading = false;
         });
       }
     } catch (e) {

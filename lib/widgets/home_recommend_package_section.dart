@@ -9,23 +9,34 @@ class HomeRecommendPackageSection extends StatefulWidget {
 
   @override
   State<HomeRecommendPackageSection> createState() =>
-      _HomeRecommendPackageSectionState();
+      HomeRecommendPackageSectionState();
 }
 
-class _HomeRecommendPackageSectionState
-    extends State<HomeRecommendPackageSection> {
+class HomeRecommendPackageSectionState extends State<HomeRecommendPackageSection> {
   final ItemService _itemService = ItemService();
   late Future<List<Item>> _futureItems;
 
   @override
   void initState() {
     super.initState();
-    // ✅ Fetch latest items (no album filter => 0 = all albums)
-    _futureItems = _itemService.fetchItems(
+    _futureItems = _loadItems(forceRefresh: false);
+  }
+
+  Future<void> reloadItems() async {
+    setState(() {
+      _futureItems = _loadItems(forceRefresh: true);
+    });
+    await _futureItems;
+  }
+
+  Future<List<Item>> _loadItems({required bool forceRefresh}) {
+    return _itemService.fetchItems(
       0,
       perPage: 5,
       orderBy: "created_at",
       orderDir: "desc",
+      forceRefresh: forceRefresh,
+      cacheTTL: const Duration(minutes: 5),
     );
   }
 
@@ -101,3 +112,4 @@ class _HomeRecommendPackageSectionState
     );
   }
 }
+
