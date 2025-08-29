@@ -84,17 +84,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
-    - assets/images/doi_suthet/
-    - assets/images/old_city/
-    - assets/images/chaloem_park/
-    - assets/images/mae_kam_pong/
-    - assets/images/nimman_road/
-    - assets/images/night_market/
-    - assets/images/gallery/
-    - assets/images/packages/
-    - assets/images/reviews/
     - assets/images/onboarding/
-    - assets/images/others/
     - assets/images/thumbnail/
     - assets/lotties/
 
