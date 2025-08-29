@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:travel_in_chiangmai/pages/login_page.dart';
+//import 'package:travel_in_chiangmai/pages/login_page.dart';
 import 'package:travel_in_chiangmai/widgets/onboarding_image.dart';
 import 'package:travel_in_chiangmai/widgets/onboarding_text.dart';
 import 'package:travel_in_chiangmai/widgets/onboarding_bottom_panel.dart';
@@ -15,24 +15,18 @@ class OnBoardingPage extends StatefulWidget {
 
 class _OnBoardingPageState extends State<OnBoardingPage> {
   int currentIndex = 0;
-  late TapGestureRecognizer _loginTapRecognizer;
+  //late TapGestureRecognizer _loginTapRecognizer;
 
   @override
   void initState() {
     super.initState();
-    _loginTapRecognizer = TapGestureRecognizer()
-      ..onTap = () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginPage()),
-        );
-      };
+    
   }
 
 
   @override
   void dispose() {
-    _loginTapRecognizer.dispose();
+    //_loginTapRecognizer.dispose();
     super.dispose();
   }
 
@@ -58,7 +52,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             alignment: Alignment.bottomCenter,
             child: OnboardingBottomPanel(
               currentIndex: currentIndex,
-              loginRecognizer: _loginTapRecognizer,
+              //loginRecognizer: _loginTapRecognizer,
             ),
           ),
         ],

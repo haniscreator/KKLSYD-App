@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:travel_in_chiangmai/animations/popin_card_images.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
 import 'package:travel_in_chiangmai/models/album.dart';
-import 'package:travel_in_chiangmai/pages/place_detail_page.dart';
+import 'package:travel_in_chiangmai/pages/album_detail_page.dart';
 
-class HomePopularPlaceCard extends StatelessWidget {
+class HomeAlbumCard extends StatelessWidget {
   final Album album; // ✅ now Album, not PopularPlaces
 
-  const HomePopularPlaceCard({super.key, required this.album});
+  const HomeAlbumCard({super.key, required this.album});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class HomePopularPlaceCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                PlaceDetailPage(album: album, initialIndex: 0), // ⚠️ PlaceDetailPage must also accept Album now
+                AlbumDetailPage(album: album, initialIndex: 0), // ⚠️ AlbumDetailPage must also accept Album now
           ),
         );
       },

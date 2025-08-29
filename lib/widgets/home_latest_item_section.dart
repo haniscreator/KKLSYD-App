@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
 import 'package:travel_in_chiangmai/models/item.dart';
 import 'package:travel_in_chiangmai/services/item_service.dart';
-import 'package:travel_in_chiangmai/widgets/home_recommend_package_card.dart';
+import 'package:travel_in_chiangmai/widgets/home_latest_item_card.dart';
 
-class HomeRecommendPackageSection extends StatefulWidget {
-  const HomeRecommendPackageSection({super.key});
+class HomeLatestItemSection extends StatefulWidget {
+  const HomeLatestItemSection({super.key});
 
   @override
-  State<HomeRecommendPackageSection> createState() =>
-      HomeRecommendPackageSectionState();
+  State<HomeLatestItemSection> createState() =>
+      HomeLatestItemSectionState();
 }
 
-class HomeRecommendPackageSectionState extends State<HomeRecommendPackageSection> {
+class HomeLatestItemSectionState extends State<HomeLatestItemSection> {
   final ItemService _itemService = ItemService();
   late Future<List<Item>> _futureItems;
 
@@ -103,7 +103,7 @@ class HomeRecommendPackageSectionState extends State<HomeRecommendPackageSection
               padding: const EdgeInsets.symmetric(horizontal: 10),
               itemCount: items.length,
               itemBuilder: (context, index) {
-                return HomeRecommendPackageCard(item: items[index]);
+                return HomeLatestItemCard(item: items[index]);
               },
             );
           },

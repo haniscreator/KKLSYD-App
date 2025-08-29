@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:travel_in_chiangmai/models/album.dart'; // ✅ New API model
 import 'package:travel_in_chiangmai/widgets/detail_overview_tab.dart';
-import 'package:travel_in_chiangmai/widgets/detail_place_image_carousel.dart';
-import 'package:travel_in_chiangmai/widgets/detail_place_tab_bar.dart';
-import 'package:travel_in_chiangmai/widgets/detail_review_tab.dart';
+
+import 'package:travel_in_chiangmai/widgets/detail_album_tab_bar.dart';
+import 'package:travel_in_chiangmai/widgets/detail_about_ablum_tab.dart';
 import 'package:travel_in_chiangmai/config.dart';
 
-class PlaceDetailPage extends StatefulWidget {
+class AlbumDetailPage extends StatefulWidget {
   final Album album; // ✅ replace PopularPlaces with Album
   final int initialIndex;
 
-  const PlaceDetailPage({
+  const AlbumDetailPage({
     super.key,
     required this.album,
     required this.initialIndex,
   });
 
   @override
-  State<PlaceDetailPage> createState() => _PlaceDetailPageState();
+  State<AlbumDetailPage> createState() => _AlbumDetailPageState();
 }
 
-class _PlaceDetailPageState extends State<PlaceDetailPage>
+class _AlbumDetailPageState extends State<AlbumDetailPage>
     with SingleTickerProviderStateMixin {
   late PageController _pageController;
   late int _currentIndex;
@@ -96,13 +96,13 @@ class _PlaceDetailPageState extends State<PlaceDetailPage>
             ),
           ),
 
-          DetailPlaceTabBar(tabController: _tabController),
+          DetailAlbumTabBar(tabController: _tabController),
         ],
         body: TabBarView(
           controller: _tabController,
           children: [
-             DetailOverviewTab(albumId: widget.album.id),
-             DetailReviewTab(description: widget.album.description),
+             DetailItemsListTab(albumId: widget.album.id),
+             AboutAlbumTab(description: widget.album.description),
           ],
         ),
       ),

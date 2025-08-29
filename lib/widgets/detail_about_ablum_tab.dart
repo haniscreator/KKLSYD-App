@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 
 
-class DetailReviewTab extends StatelessWidget {
+class AboutAlbumTab extends StatelessWidget {
   final String description; // ✅ add this
 
-  const DetailReviewTab({super.key, required this.description});
+  const AboutAlbumTab({super.key, required this.description});
 
   @override
   Widget build(BuildContext context) {

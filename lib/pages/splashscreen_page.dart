@@ -17,7 +17,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -35,7 +35,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
       backgroundColor: Colors.white,
       body: Center(
         child: Lottie.asset(
-          'assets/lotties/splash.json',
+          'assets/lotties/splash2.json',
           width: 250,
           height: 250,
           fit: BoxFit.contain,

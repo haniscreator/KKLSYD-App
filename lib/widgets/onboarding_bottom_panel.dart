@@ -6,12 +6,12 @@ import 'package:travel_in_chiangmai/widgets/onboarding_dots.dart';
 
 class OnboardingBottomPanel extends StatelessWidget {
   final int currentIndex;
-  final TapGestureRecognizer loginRecognizer;
+  //final TapGestureRecognizer loginRecognizer;
 
   const OnboardingBottomPanel({
     super.key,
     required this.currentIndex,
-    required this.loginRecognizer,
+    //required this.loginRecognizer,
   });
 
   @override
@@ -79,30 +79,9 @@ class OnboardingBottomPanel extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      TextSpan(
-                        text: "already have account? ",
-                        style: TextStyle(
-                          fontSize: normalTextFontSize,
-                          color: theme.textTheme.bodyMedium?.color,
-                        ),
-                      ),
-                      TextSpan(
-                        text: "Login",
-                        style: TextStyle(
-                          color: textLinkColor,
-                          fontWeight: textFontWeight,
-                          fontSize: normalTextFontSize,
-                        ),
-                        recognizer: loginRecognizer,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 30),
+    
+                
               ],
             ),
           ),

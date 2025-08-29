@@ -5,19 +5,19 @@ import 'package:travel_in_chiangmai/services/item_service.dart';
 import 'package:travel_in_chiangmai/pages/audioplayer_page.dart';
 import 'package:travel_in_chiangmai/config.dart';
 
-class DetailOverviewTab extends StatefulWidget {
+class DetailItemsListTab extends StatefulWidget {
   final int albumId; // ✅ only need albumId now
 
-  const DetailOverviewTab({
+  const DetailItemsListTab({
     super.key,
     required this.albumId,
   });
 
   @override
-  State<DetailOverviewTab> createState() => _DetailOverviewTabState();
+  State<DetailItemsListTab> createState() => _DetailItemsListTabState();
 }
 
-class _DetailOverviewTabState extends State<DetailOverviewTab> {
+class _DetailItemsListTabState extends State<DetailItemsListTab> {
   late Future<List<Item>> futureItems;
 
   @override

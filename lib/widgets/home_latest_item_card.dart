@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
 import 'package:travel_in_chiangmai/models/item.dart';
 
-class HomeRecommendPackageCard extends StatefulWidget {
+class HomeLatestItemCard extends StatefulWidget {
   final Item item;
 
-  const HomeRecommendPackageCard({super.key, required this.item});
+  const HomeLatestItemCard({super.key, required this.item});
 
   @override
-  State<HomeRecommendPackageCard> createState() =>
-      _HomeRecommendPackageCardState();
+  State<HomeLatestItemCard> createState() =>
+      _HomeLatestItemCardState();
 }
 
-class _HomeRecommendPackageCardState extends State<HomeRecommendPackageCard>
+class _HomeLatestItemCardState extends State<HomeLatestItemCard>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;

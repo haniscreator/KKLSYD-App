@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class DetailPlaceTabBar extends StatelessWidget {
+class DetailAlbumTabBar extends StatelessWidget {
   final TabController tabController;
 
-  const DetailPlaceTabBar({
+  const DetailAlbumTabBar({
     super.key,
     required this.tabController,
   });

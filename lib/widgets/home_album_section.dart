@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:travel_in_chiangmai/models/album.dart';
 import 'package:travel_in_chiangmai/services/album_service.dart';
-import 'package:travel_in_chiangmai/widgets/home_popular_place_card.dart';
+import 'package:travel_in_chiangmai/widgets/home_album_card.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class HomePopularPlaceSection extends StatefulWidget {
-  const HomePopularPlaceSection({super.key});
+class HomeAlbumSection extends StatefulWidget {
+  const HomeAlbumSection({super.key});
 
   @override
-  State<HomePopularPlaceSection> createState() => HomePopularPlaceSectionState();
+  State<HomeAlbumSection> createState() => HomeAlbumSectionState();
 }
 
-class HomePopularPlaceSectionState extends State<HomePopularPlaceSection> {
+class HomeAlbumSectionState extends State<HomeAlbumSection> {
   final AlbumService _albumService = AlbumService();
   List<Album> _albums = [];
   bool _isLoading = true;
@@ -130,7 +130,7 @@ class HomePopularPlaceSectionState extends State<HomePopularPlaceSection> {
                 itemCount: _albums.length,
                 itemBuilder: (context, index) {
                   final album = _albums[index];
-                  return HomePopularPlaceCard(album: album);
+                  return HomeAlbumCard(album: album);
                 },
               );
             },

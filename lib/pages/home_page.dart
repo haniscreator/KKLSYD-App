@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:travel_in_chiangmai/widgets/home_location_dropdown.dart';
-import 'package:travel_in_chiangmai/widgets/home_popular_place_section.dart';
-import 'package:travel_in_chiangmai/widgets/home_recommend_package_section.dart';
+//import 'package:travel_in_chiangmai/widgets/home_location_dropdown.dart';
+import 'package:travel_in_chiangmai/widgets/home_album_section.dart';
+import 'package:travel_in_chiangmai/widgets/home_latest_item_section.dart';
 import 'package:travel_in_chiangmai/widgets/home_theme_icon.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,9 +12,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final GlobalKey<HomePopularPlaceSectionState> _popularKey = GlobalKey();
-  final GlobalKey<HomeRecommendPackageSectionState> _recommendKey =
-      GlobalKey<HomeRecommendPackageSectionState>();
+  final GlobalKey<HomeAlbumSectionState> _popularKey = GlobalKey();
+  final GlobalKey<HomeLatestItemSectionState> _recommendKey =
+      GlobalKey<HomeLatestItemSectionState>();
 
   Future<void> _handleRefresh() async {
     // 🔄 Call refresh functions inside child widgets after the current frame
@@ -37,9 +37,9 @@ class _HomePageState extends State<HomePage> {
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.only(top: 20, left: 16, right: 16, bottom: 16),
           children: [
-            HomePopularPlaceSection(key: _popularKey),
+            HomeAlbumSection(key: _popularKey),
             const SizedBox(height: 20),
-            HomeRecommendPackageSection(key: _recommendKey),
+            HomeLatestItemSection(key: _recommendKey),
           ],
         ),
       ),
