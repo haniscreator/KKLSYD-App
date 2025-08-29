@@ -30,21 +30,16 @@ class HomeAlbumSectionState extends State<HomeAlbumSection> {
   }
 
   Future<void> _loadAlbums({bool forceRefresh = false}) async {
-    try {
-      if (!forceRefresh) {
-        final cachedAlbums = await _albumService.fetchAlbums();
-        if (mounted) {
-          setState(() {
-            _albums = cachedAlbums;
-            _isLoading = false;
-          });
-        }
-      }
+    setState(() {
+      _isLoading = true;
+      _hasError = false;
+    });
 
-      final freshAlbums = await _albumService.fetchAlbums(forceRefresh: true);
-      if (mounted && freshAlbums.isNotEmpty) {
+    try {
+      final albums = await _albumService.fetchAlbums(forceRefresh: forceRefresh);
+      if (mounted) {
         setState(() {
-          _albums = freshAlbums;
+          _albums = albums;
           _isLoading = false;
         });
       }
@@ -80,21 +75,21 @@ class HomeAlbumSectionState extends State<HomeAlbumSection> {
                   color: theme.textTheme.bodyLarge?.color,
                 ),
               ),
-            GestureDetector(
-  onTap: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const AlbumListPage()),
-    );
-  },
-  child: Text(
-    "See All",
-    style: TextStyle(
-      fontSize: smallTextFontSize,
-      color: isDark ? Colors.teal[200] : Colors.teal,
-    ),
-  ),
-),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const AlbumListPage()),
+                  );
+                },
+                child: Text(
+                  "See All",
+                  style: TextStyle(
+                    fontSize: smallTextFontSize,
+                    color: isDark ? Colors.teal[200] : Colors.teal,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -105,7 +100,6 @@ class HomeAlbumSectionState extends State<HomeAlbumSection> {
           child: Builder(
             builder: (context) {
               if (_isLoading && _albums.isEmpty) {
-                // 🔥 Shimmer Skeleton Loader
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -132,7 +126,6 @@ class HomeAlbumSectionState extends State<HomeAlbumSection> {
                 return const Center(child: Text("No albums found"));
               }
 
-              // ✅ Show albums (cached or fresh)
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 20),

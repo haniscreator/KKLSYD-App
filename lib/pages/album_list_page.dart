@@ -13,12 +13,16 @@ class AlbumListPage extends StatefulWidget {
 class _AlbumListPageState extends State<AlbumListPage> {
   final AlbumService _albumService = AlbumService();
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
 
   final List<Album> _albums = [];
   bool _isLoading = false;
   bool _hasMore = true;
   int _page = 1;
   final int _perPage = 10;
+
+  bool _isSearching = false;
+  String _searchTerm = "";
 
   @override
   void initState() {
@@ -49,6 +53,7 @@ class _AlbumListPageState extends State<AlbumListPage> {
       final newAlbums = await _albumService.fetchAlbums(
         page: _page,
         perPage: _perPage,
+        searchTerm: _searchTerm,
         forceRefresh: refresh || _page == 1,
       );
 
@@ -70,17 +75,68 @@ class _AlbumListPageState extends State<AlbumListPage> {
     }
   }
 
+  void _startSearch() {
+    setState(() => _isSearching = true);
+  }
+
+  void _stopSearch() {
+    setState(() {
+      _isSearching = false;
+      _searchController.clear();
+      _searchTerm = "";
+    });
+    _fetchAlbums(refresh: true);
+  }
+
+  void _onSearchChanged(String value) {
+    
+    setState(() => _searchTerm = value);
+    _fetchAlbums(refresh: true);
+  }
+
   @override
   void dispose() {
     _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
+    _searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Albums')),
+      appBar: AppBar(
+        title: _isSearching
+            ? TextField(
+              controller: _searchController,
+              autofocus: true,
+              decoration: const InputDecoration(
+                hintText: "Search albums...",
+                border: InputBorder.none,
+              ),
+              onChanged: (value) {
+                print("onChanged fired: $value"); // <- trace live typing
+                _onSearchChanged(value);
+              },
+              onSubmitted: (value) {
+                print("onSubmitted fired: $value"); // <- trace Enter key
+                _onSearchChanged(value);
+              },
+            )
+
+            : const Text('Albums'),
+        actions: [
+          _isSearching
+              ? IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: _stopSearch,
+                )
+              : IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: _startSearch,
+                ),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: () => _fetchAlbums(refresh: true),
         child: ListView.separated(
@@ -95,7 +151,6 @@ class _AlbumListPageState extends State<AlbumListPage> {
               return Padding(
                 key: ValueKey('album_row_${album.id ?? index}'),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                // Disable Hero + make card full width in list context
                 child: HomeAlbumCard(
                   album: album,
                   useHero: false,
@@ -104,7 +159,6 @@ class _AlbumListPageState extends State<AlbumListPage> {
               );
             }
 
-            // Loader row at the end
             return const Padding(
               padding: EdgeInsets.all(16),
               child: Center(child: CircularProgressIndicator()),

@@ -5,16 +5,20 @@ import '../config.dart';
 import '../models/album.dart';
 
 class AlbumService {
-  /// Fetch albums with caching and optional pagination
   Future<List<Album>> fetchAlbums({
     int page = 1,
     int perPage = 10,
+    String? searchTerm,
     bool forceRefresh = false,
   }) async {
     final prefs = await SharedPreferences.getInstance();
-    final cacheKey = 'albums_cache_page_${page}_per_${perPage}';
 
-    // ✅ Return cached albums if available and not forcing refresh
+    // Cache key
+    String cacheKey = 'albums_cache_page_${page}_per_${perPage}';
+    if (searchTerm != null && searchTerm.isNotEmpty) {
+      cacheKey += '_search_${searchTerm.toLowerCase()}';
+    }
+
     if (!forceRefresh && prefs.containsKey(cacheKey)) {
       final cachedJson = prefs.getString(cacheKey);
       if (cachedJson != null) {
@@ -23,24 +27,41 @@ class AlbumService {
       }
     }
 
-    // ✅ Fetch from API with pagination
-    final uri = Uri.parse(
-      "${AppConfig.albums}?page=$page&per_page=$perPage",
+    // POST body
+    final uri = Uri.parse(AppConfig.albums);
+    final body = {
+      "page": page,
+      "per_page": perPage,
+      if (searchTerm != null && searchTerm.isNotEmpty) "search_term": searchTerm,
+    };
+
+    final response = await http.post(
+      uri,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(body),
     );
 
-    final response = await http.get(uri);
+    
+    print("API response: ${response.body}");
+
 
     if (response.statusCode == 200) {
-      final jsonData = jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
 
-      // 🔥 Handle API format: make sure your API returns {"data": [...]}
-      final List<dynamic> data =
-          jsonData['data'] ?? (jsonData is List ? jsonData : []);
+      List<dynamic> data = [];
 
-      // ✅ Save to cache
+      if (decoded is Map && decoded.containsKey("data")) {
+        data = decoded["data"];
+      } else if (decoded is List) {
+        data = decoded;
+      }
+
       await prefs.setString(cacheKey, jsonEncode(data));
 
-      return data.map((albumJson) => Album.fromJson(albumJson)).toList();
+      print("POST body: ${jsonEncode(body)}");
+      print("API response: ${response.body}");
+
+      return data.map((e) => Album.fromJson(e)).toList();
     } else {
       throw Exception("Failed to load albums: ${response.statusCode}");
     }
