@@ -5,12 +5,16 @@ import '../config.dart';
 import '../models/album.dart';
 
 class AlbumService {
-  /// Fetch albums with caching
-  Future<List<Album>> fetchAlbums({bool forceRefresh = false}) async {
+  /// Fetch albums with caching and optional pagination
+  Future<List<Album>> fetchAlbums({
+    int page = 1,
+    int perPage = 10,
+    bool forceRefresh = false,
+  }) async {
     final prefs = await SharedPreferences.getInstance();
-    const cacheKey = 'albums_cache';
+    final cacheKey = 'albums_cache_page_${page}_per_${perPage}';
 
-    // Return cached albums if available and not forcing refresh
+    // ✅ Return cached albums if available and not forcing refresh
     if (!forceRefresh && prefs.containsKey(cacheKey)) {
       final cachedJson = prefs.getString(cacheKey);
       if (cachedJson != null) {
@@ -19,14 +23,21 @@ class AlbumService {
       }
     }
 
-    // Fetch from API
-    final response = await http.get(Uri.parse(AppConfig.albums));
+    // ✅ Fetch from API with pagination
+    final uri = Uri.parse(
+      "${AppConfig.albums}?page=$page&per_page=$perPage",
+    );
+
+    final response = await http.get(uri);
 
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
-      final List<dynamic> data = jsonData['data'];
 
-      // Save to cache
+      // 🔥 Handle API format: make sure your API returns {"data": [...]}
+      final List<dynamic> data =
+          jsonData['data'] ?? (jsonData is List ? jsonData : []);
+
+      // ✅ Save to cache
       await prefs.setString(cacheKey, jsonEncode(data));
 
       return data.map((albumJson) => Album.fromJson(albumJson)).toList();
@@ -35,4 +46,3 @@ class AlbumService {
     }
   }
 }
-

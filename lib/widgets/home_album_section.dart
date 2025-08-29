@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:travel_in_chiangmai/models/album.dart';
+import 'package:travel_in_chiangmai/pages/album_list_page.dart';
 import 'package:travel_in_chiangmai/services/album_service.dart';
 import 'package:travel_in_chiangmai/widgets/home_album_card.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
@@ -79,13 +80,21 @@ class HomeAlbumSectionState extends State<HomeAlbumSection> {
                   color: theme.textTheme.bodyLarge?.color,
                 ),
               ),
-              Text(
-                "See All",
-                style: TextStyle(
-                  fontSize: smallTextFontSize,
-                  color: isDark ? Colors.teal[200] : Colors.teal,
-                ),
-              ),
+            GestureDetector(
+  onTap: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const AlbumListPage()),
+    );
+  },
+  child: Text(
+    "See All",
+    style: TextStyle(
+      fontSize: smallTextFontSize,
+      color: isDark ? Colors.teal[200] : Colors.teal,
+    ),
+  ),
+),
             ],
           ),
         ),
