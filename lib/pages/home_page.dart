@@ -1,52 +1,42 @@
 import 'package:flutter/material.dart';
-//import 'package:travel_in_chiangmai/widgets/home_location_dropdown.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_in_chiangmai/widgets/home_album_section.dart';
 import 'package:travel_in_chiangmai/widgets/home_latest_item_section.dart';
 import 'package:travel_in_chiangmai/widgets/home_theme_icon.dart';
+import 'package:travel_in_chiangmai/providers/album_providers.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  final GlobalKey<HomeAlbumSectionState> _popularKey = GlobalKey();
-  final GlobalKey<HomeLatestItemSectionState> _recommendKey =
-      GlobalKey<HomeLatestItemSectionState>();
-
-  Future<void> _handleRefresh() async {
-    // 🔄 Call refresh functions inside child widgets after the current frame
-    await Future.delayed(const Duration(milliseconds: 50));
-    await Future.wait([
-      _popularKey.currentState?.reloadAlbums() ?? Future.value(),
-      _recommendKey.currentState?.reloadItems() ?? Future.value(),
-    ]);
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+
+    Future<void> _handleRefresh() async {
+      // refresh all async providers
+      ref.refresh(albumsProvider);
+      // later: add ref.refresh(itemsProvider);
+    }
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: headerParts(),
+      appBar: headerParts(context),
       body: RefreshIndicator(
         onRefresh: _handleRefresh,
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.only(top: 20, left: 16, right: 16, bottom: 16),
-          children: [
-            HomeAlbumSection(key: _popularKey),
-            const SizedBox(height: 20),
-            HomeLatestItemSection(key: _recommendKey),
+          children: const [
+            HomeAlbumSection(),
+            SizedBox(height: 20),
+            HomeLatestItemSection(), // we’ll migrate this later
           ],
         ),
       ),
     );
   }
 
-  AppBar headerParts() {
+  AppBar headerParts(BuildContext context) {
     final theme = Theme.of(context);
     return AppBar(
       elevation: 0,
@@ -56,7 +46,6 @@ class _HomePageState extends State<HomePage> {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: const [
-          //HomeLocationDropdown(),
           HomeThemeIcon(),
         ],
       ),

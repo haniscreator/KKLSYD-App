@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum AppTheme { light, dark }
@@ -11,8 +11,8 @@ class ThemeState {
   ThemeState({required this.themeData, required this.appTheme});
 }
 
-class ThemeCubit extends Cubit<ThemeState> {
-  ThemeCubit() : super(_lightTheme) {
+class ThemeNotifier extends StateNotifier<ThemeState> {
+  ThemeNotifier() : super(_lightTheme) {
     _loadTheme();
   }
 
@@ -60,16 +60,24 @@ class ThemeCubit extends Cubit<ThemeState> {
     appTheme: AppTheme.dark,
   );
 
-  void toggleTheme() async {
-    final newTheme = state.appTheme == AppTheme.light ? _darkTheme : _lightTheme;
-    emit(newTheme);
+  /// Toggle between light and dark theme
+  Future<void> toggleTheme() async {
+    final newTheme =
+        state.appTheme == AppTheme.light ? _darkTheme : _lightTheme;
+    state = newTheme;
+
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isDarkMode', newTheme.appTheme == AppTheme.dark);
   }
 
-  void _loadTheme() async {
+  /// Load saved theme from SharedPreferences
+  Future<void> _loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
     final isDarkMode = prefs.getBool('isDarkMode') ?? false;
-    emit(isDarkMode ? _darkTheme : _lightTheme);
+    state = isDarkMode ? _darkTheme : _lightTheme;
   }
 }
+
+/// Riverpod provider
+final themeProvider =
+    StateNotifierProvider<ThemeNotifier, ThemeState>((ref) => ThemeNotifier());

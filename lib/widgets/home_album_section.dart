@@ -1,60 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_in_chiangmai/models/album.dart';
 import 'package:travel_in_chiangmai/pages/album_list_page.dart';
-import 'package:travel_in_chiangmai/services/album_service.dart';
+import 'package:travel_in_chiangmai/providers/album_providers.dart';
 import 'package:travel_in_chiangmai/widgets/home_album_card.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
-class HomeAlbumSection extends StatefulWidget {
+class HomeAlbumSection extends ConsumerWidget {
   const HomeAlbumSection({super.key});
 
   @override
-  State<HomeAlbumSection> createState() => HomeAlbumSectionState();
-}
-
-class HomeAlbumSectionState extends State<HomeAlbumSection> {
-  final AlbumService _albumService = AlbumService();
-  List<Album> _albums = [];
-  bool _isLoading = true;
-  bool _hasError = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadAlbums();
-  }
-
-  Future<void> reloadAlbums() async {
-    await _loadAlbums(forceRefresh: true);
-  }
-
-  Future<void> _loadAlbums({bool forceRefresh = false}) async {
-    setState(() {
-      _isLoading = true;
-      _hasError = false;
-    });
-
-    try {
-      final albums = await _albumService.fetchAlbums(forceRefresh: forceRefresh);
-      if (mounted) {
-        setState(() {
-          _albums = albums;
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _hasError = true;
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncAlbums = ref.watch(albumsProvider);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -94,48 +52,45 @@ class HomeAlbumSectionState extends State<HomeAlbumSection> {
           ),
         ),
 
-        // Albums List (Shimmer / Data / Error)
+        // Albums List
         SizedBox(
           height: 210,
-          child: Builder(
-            builder: (context) {
-              if (_isLoading && _albums.isEmpty) {
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: Shimmer(
-                        child: Container(
-                          width: 320,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300],
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              } else if (_hasError && _albums.isEmpty) {
-                return const Center(child: Text("Error loading albums"));
-              } else if (_albums.isEmpty) {
+          child: asyncAlbums.when(
+            data: (albums) {
+              if (albums.isEmpty) {
                 return const Center(child: Text("No albums found"));
               }
-
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: _albums.length,
+                itemCount: albums.length,
                 itemBuilder: (context, index) {
-                  final album = _albums[index];
+                  final album = albums[index];
                   return HomeAlbumCard(album: album);
                 },
               );
             },
+            loading: () => ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              itemCount: 4,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Shimmer(
+                    child: Container(
+                      width: 320,
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            error: (_, __) => const Center(child: Text("Error loading albums")),
           ),
         ),
       ],
