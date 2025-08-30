@@ -1,47 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
 import 'package:travel_in_chiangmai/models/item.dart';
-import 'package:travel_in_chiangmai/services/item_service.dart';
+import 'package:travel_in_chiangmai/providers/item_providers.dart';
 import 'package:travel_in_chiangmai/widgets/home_latest_item_card.dart';
 
-class HomeLatestItemSection extends StatefulWidget {
+class HomeLatestItemSection extends ConsumerWidget {
   const HomeLatestItemSection({super.key});
 
   @override
-  State<HomeLatestItemSection> createState() =>
-      HomeLatestItemSectionState();
-}
-
-class HomeLatestItemSectionState extends State<HomeLatestItemSection> {
-  final ItemService _itemService = ItemService();
-  late Future<List<Item>> _futureItems;
-
-  @override
-  void initState() {
-    super.initState();
-    _futureItems = _loadItems(forceRefresh: false);
-  }
-
-  Future<void> reloadItems() async {
-    setState(() {
-      _futureItems = _loadItems(forceRefresh: true);
-    });
-    await _futureItems;
-  }
-
-  Future<List<Item>> _loadItems({required bool forceRefresh}) {
-    return _itemService.fetchItems(
-      0,
-      perPage: 5,
-      orderBy: "created_at",
-      orderDir: "desc",
-      forceRefresh: forceRefresh,
-      cacheTTL: const Duration(minutes: 5),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final asyncItems = ref.watch(latestItemsProvider);
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
@@ -71,32 +40,29 @@ class HomeLatestItemSectionState extends State<HomeLatestItemSection> {
             ],
           ),
         ),
-        FutureBuilder<List<Item>>(
-          future: _futureItems,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            } else if (snapshot.hasError) {
-              return Padding(
-                padding: const EdgeInsets.all(16),
-                child: Text(
-                  "Failed to load items: ${snapshot.error}",
-                  style: const TextStyle(color: Colors.red),
-                ),
-              );
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+
+        asyncItems.when(
+          loading: () => const Center(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: CircularProgressIndicator(),
+            ),
+          ),
+          error: (error, _) => Padding(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              "Failed to load items: $error",
+              style: const TextStyle(color: Colors.red),
+            ),
+          ),
+          data: (items) {
+            if (items.isEmpty) {
               return const Padding(
                 padding: EdgeInsets.all(16),
                 child: Text("No items available."),
               );
             }
 
-            final items = snapshot.data!;
             return ListView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -112,4 +78,3 @@ class HomeLatestItemSectionState extends State<HomeLatestItemSection> {
     );
   }
 }
-

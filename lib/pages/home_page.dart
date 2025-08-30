@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:travel_in_chiangmai/providers/item_providers.dart';
 import 'package:travel_in_chiangmai/widgets/home_album_section.dart';
 import 'package:travel_in_chiangmai/widgets/home_latest_item_section.dart';
 import 'package:travel_in_chiangmai/widgets/home_theme_icon.dart';
@@ -15,7 +16,7 @@ class HomePage extends ConsumerWidget {
     Future<void> _handleRefresh() async {
       // refresh all async providers
       ref.refresh(albumsProvider);
-      // later: add ref.refresh(itemsProvider);
+      ref.refresh(latestItemsProvider);
     }
 
     return Scaffold(
