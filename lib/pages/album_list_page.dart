@@ -1,77 +1,125 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_in_chiangmai/models/album.dart';
 import 'package:travel_in_chiangmai/services/album_service.dart';
 import 'package:travel_in_chiangmai/widgets/home_album_card.dart';
 
-class AlbumListPage extends StatefulWidget {
+/// STATE MODEL
+class AlbumListState {
+  final List<Album> albums;
+  final bool isLoading;
+  final bool hasMore;
+  final int page;
+  final String searchTerm;
+
+  const AlbumListState({
+    this.albums = const [],
+    this.isLoading = false,
+    this.hasMore = true,
+    this.page = 1,
+    this.searchTerm = '',
+  });
+
+  AlbumListState copyWith({
+    List<Album>? albums,
+    bool? isLoading,
+    bool? hasMore,
+    int? page,
+    String? searchTerm,
+  }) {
+    return AlbumListState(
+      albums: albums ?? this.albums,
+      isLoading: isLoading ?? this.isLoading,
+      hasMore: hasMore ?? this.hasMore,
+      page: page ?? this.page,
+      searchTerm: searchTerm ?? this.searchTerm,
+    );
+  }
+}
+
+/// NOTIFIER
+class AlbumListNotifier extends StateNotifier<AlbumListState> {
+  AlbumListNotifier() : super(const AlbumListState());
+
+  final AlbumService _albumService = AlbumService();
+  final int _perPage = 10;
+
+  Future<void> fetchAlbums({bool refresh = false}) async {
+    if (state.isLoading) return;
+
+    state = state.copyWith(isLoading: true);
+
+    try {
+      int page = refresh ? 1 : state.page;
+
+      final newAlbums = await _albumService.fetchAlbums(
+        page: page,
+        perPage: _perPage,
+        searchTerm: state.searchTerm,
+        forceRefresh: refresh || page == 1,
+      );
+
+      state = state.copyWith(
+        albums: refresh ? newAlbums : [...state.albums, ...newAlbums],
+        hasMore: newAlbums.length == _perPage,
+        page: (newAlbums.length == _perPage) ? page + 1 : page,
+      );
+    } catch (e) {
+      debugPrint('Failed to load albums: $e');
+    } finally {
+      state = state.copyWith(isLoading: false);
+    }
+  }
+
+  void updateSearchTerm(String searchTerm) {
+    state = state.copyWith(searchTerm: searchTerm);
+    fetchAlbums(refresh: true);
+  }
+
+  void reset() {
+    state = const AlbumListState();
+    fetchAlbums(refresh: true);
+  }
+}
+
+/// PROVIDER
+final albumListProvider =
+    StateNotifierProvider<AlbumListNotifier, AlbumListState>((ref) {
+  return AlbumListNotifier();
+});
+
+/// UI
+class AlbumListPage extends ConsumerStatefulWidget {
   const AlbumListPage({super.key});
 
   @override
-  State<AlbumListPage> createState() => _AlbumListPageState();
+  ConsumerState<AlbumListPage> createState() => _AlbumListPageState();
 }
 
-class _AlbumListPageState extends State<AlbumListPage> {
-  final AlbumService _albumService = AlbumService();
+class _AlbumListPageState extends ConsumerState<AlbumListPage> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
 
-  final List<Album> _albums = [];
-  bool _isLoading = false;
-  bool _hasMore = true;
-  int _page = 1;
-  final int _perPage = 10;
-
   bool _isSearching = false;
-  String _searchTerm = "";
 
   @override
   void initState() {
     super.initState();
-    _fetchAlbums();
+    Future.microtask(
+        () => ref.read(albumListProvider.notifier).fetchAlbums(refresh: true));
     _scrollController.addListener(_onScroll);
   }
 
   void _onScroll() {
-    if (!_scrollController.hasClients) return;
+    final state = ref.read(albumListProvider);
+    if (!_scrollController.hasClients || state.isLoading || !state.hasMore) {
+      return;
+    }
+
     const threshold = 200.0;
     final pos = _scrollController.position;
-    if (pos.pixels >= pos.maxScrollExtent - threshold && !_isLoading && _hasMore) {
-      _fetchAlbums();
-    }
-  }
-
-  Future<void> _fetchAlbums({bool refresh = false}) async {
-    if (_isLoading) return;
-    setState(() => _isLoading = true);
-
-    try {
-      if (refresh) {
-        _page = 1;
-        _hasMore = true;
-      }
-
-      final newAlbums = await _albumService.fetchAlbums(
-        page: _page,
-        perPage: _perPage,
-        searchTerm: _searchTerm,
-        forceRefresh: refresh || _page == 1,
-      );
-
-      if (!mounted) return;
-
-      setState(() {
-        if (refresh) _albums.clear();
-        _albums.addAll(newAlbums);
-        _hasMore = newAlbums.length == _perPage;
-        if (_hasMore) _page += 1;
-      });
-    } catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load albums: $e')),
-      );
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
+    if (pos.pixels >= pos.maxScrollExtent - threshold) {
+      ref.read(albumListProvider.notifier).fetchAlbums();
     }
   }
 
@@ -83,20 +131,16 @@ class _AlbumListPageState extends State<AlbumListPage> {
     setState(() {
       _isSearching = false;
       _searchController.clear();
-      _searchTerm = "";
     });
-    _fetchAlbums(refresh: true);
+    ref.read(albumListProvider.notifier).updateSearchTerm('');
   }
 
   void _onSearchChanged(String value) {
-    
-    setState(() => _searchTerm = value);
-    _fetchAlbums(refresh: true);
+    ref.read(albumListProvider.notifier).updateSearchTerm(value);
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     _searchController.dispose();
     super.dispose();
@@ -104,26 +148,27 @@ class _AlbumListPageState extends State<AlbumListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(albumListProvider);
+
     return Scaffold(
       appBar: AppBar(
         title: _isSearching
             ? TextField(
-              controller: _searchController,
-              autofocus: true,
-              decoration: const InputDecoration(
-                hintText: "Search albums...",
-                border: InputBorder.none,
-              ),
-              onChanged: (value) {
-                print("onChanged fired: $value"); // <- trace live typing
-                _onSearchChanged(value);
-              },
-              onSubmitted: (value) {
-                print("onSubmitted fired: $value"); // <- trace Enter key
-                _onSearchChanged(value);
-              },
-            )
-
+                controller: _searchController,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  hintText: "Search albums...",
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) {
+                  debugPrint("onChanged fired: $value");
+                  _onSearchChanged(value);
+                },
+                onSubmitted: (value) {
+                  debugPrint("onSubmitted fired: $value");
+                  _onSearchChanged(value);
+                },
+              )
             : const Text('Albums'),
         actions: [
           _isSearching
@@ -138,16 +183,17 @@ class _AlbumListPageState extends State<AlbumListPage> {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => _fetchAlbums(refresh: true),
+        onRefresh: () =>
+            ref.read(albumListProvider.notifier).fetchAlbums(refresh: true),
         child: ListView.separated(
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.symmetric(vertical: 8),
-          itemCount: _albums.length + (_hasMore || _isLoading ? 1 : 0),
+          itemCount: state.albums.length + (state.hasMore || state.isLoading ? 1 : 0),
           separatorBuilder: (_, __) => const SizedBox(height: 8),
           itemBuilder: (context, index) {
-            if (index < _albums.length) {
-              final album = _albums[index];
+            if (index < state.albums.length) {
+              final album = state.albums[index];
               return Padding(
                 key: ValueKey('album_row_${album.id ?? index}'),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
