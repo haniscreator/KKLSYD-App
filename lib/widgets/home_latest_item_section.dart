@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
 import 'package:travel_in_chiangmai/models/item.dart';
+import 'package:travel_in_chiangmai/pages/item_list_page.dart';
 import 'package:travel_in_chiangmai/providers/item_providers.dart';
 import 'package:travel_in_chiangmai/widgets/home_latest_item_card.dart';
 
@@ -30,13 +31,22 @@ class HomeLatestItemSection extends ConsumerWidget {
                   fontWeight: textFontWeight,
                 ),
               ),
-              Text(
-                "See All",
-                style: TextStyle(
-                  fontSize: smallTextFontSize,
-                  color: isDark ? Colors.lightBlue[200] : Colors.blue,
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const ItemListPage()),
+                  );
+                },
+                child: Text(
+                  "See All",
+                  style: TextStyle(
+                    fontSize: smallTextFontSize,
+                    color: isDark ? Colors.lightBlue[200] : Colors.blue,
+                  ),
                 ),
               ),
+
             ],
           ),
         ),
