@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_in_chiangmai/providers/item_providers.dart';
 import 'package:travel_in_chiangmai/widgets/home_album_section.dart';
 import 'package:travel_in_chiangmai/widgets/home_latest_item_section.dart';
-import 'package:travel_in_chiangmai/widgets/home_theme_icon.dart';
 import 'package:travel_in_chiangmai/providers/album_providers.dart';
+import 'package:travel_in_chiangmai/widgets/home_appbar_section.dart'; 
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -21,7 +21,7 @@ class HomePage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: headerParts(context),
+      appBar: const HomeAppBarSection(),
       body: RefreshIndicator(
         onRefresh: _handleRefresh,
         child: ListView(
@@ -30,25 +30,9 @@ class HomePage extends ConsumerWidget {
           children: const [
             HomeAlbumSection(),
             SizedBox(height: 20),
-            HomeLatestItemSection(), // we’ll migrate this later
+            HomeLatestItemSection(),
           ],
         ),
-      ),
-    );
-  }
-
-  AppBar headerParts(BuildContext context) {
-    final theme = Theme.of(context);
-    return AppBar(
-      elevation: 0,
-      backgroundColor:
-          theme.appBarTheme.backgroundColor ?? theme.scaffoldBackgroundColor,
-      automaticallyImplyLeading: false,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: const [
-          HomeThemeIcon(),
-        ],
       ),
     );
   }

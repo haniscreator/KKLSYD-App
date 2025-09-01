@@ -2,7 +2,14 @@ import 'package:flutter/material.dart';
 
 
 class GlowAvatar extends StatefulWidget {
-  const GlowAvatar({super.key});
+  final double radius;
+  final String imagePath;
+
+  const GlowAvatar({
+    super.key,
+    this.radius = 20, // default smaller for AppBar
+    this.imagePath = 'assets/images/avatar.jpg',
+  });
 
   @override
   State<GlowAvatar> createState() => _GlowAvatarState();
@@ -29,20 +36,20 @@ class _GlowAvatarState extends State<GlowAvatar>
       duration: const Duration(seconds: 1),
       curve: Curves.easeIn,
       child: Container(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(3),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(
-              color: Colors.teal.withOpacity(0.6),
-              blurRadius: 20,
-              spreadRadius: 5,
+              color: const Color.fromARGB(252, 232, 161, 1).withOpacity(0.6),
+              blurRadius: 12,
+              spreadRadius: 3,
             ),
           ],
         ),
-        child: const CircleAvatar(
-          radius: 50,
-          backgroundImage: AssetImage('assets/images/avatar.jpg'),
+        child: CircleAvatar(
+          radius: widget.radius,
+          backgroundImage: AssetImage(widget.imagePath),
         ),
       ),
     );
