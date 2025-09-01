@@ -70,6 +70,7 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
         orderDir: state.orderDir,
         searchTerm: state.searchTerm,
         forceRefresh: refresh || nextPage == 1,
+        cacheTTL: const Duration(minutes: 10), // Use 10 min cache
       );
 
       state = state.copyWith(
@@ -79,6 +80,7 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
       );
     } catch (e) {
       // Handle error if needed
+      print("Failed to fetch items: $e");
     } finally {
       state = state.copyWith(isLoading: false);
     }
@@ -138,15 +140,20 @@ final itemListProvider =
 );
 
 /// --------------------
-/// Latest Items Provider (Homepage Preview)
+/// Latest Items Provider (Homepage Preview with Cache)
 /// --------------------
 final latestItemsProvider = FutureProvider<List<Item>>((ref) async {
   final service = ItemService();
-  return service.fetchItems(
-    0,
+
+  // Use SharedPreferences cache with TTL
+  final items = await service.fetchItems(
+    0, // albumId 0 = latest items
     perPage: 5,
     orderBy: "created_at",
     orderDir: "desc",
-    forceRefresh: true,
+    forceRefresh: false,             // use cache by default
+    cacheTTL: const Duration(minutes: 10),
   );
+
+  return items;
 });

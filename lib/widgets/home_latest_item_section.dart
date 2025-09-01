@@ -4,6 +4,7 @@ import 'package:travel_in_chiangmai/const/const.dart';
 import 'package:travel_in_chiangmai/models/item.dart';
 import 'package:travel_in_chiangmai/pages/item_list_page.dart';
 import 'package:travel_in_chiangmai/providers/item_providers.dart';
+import 'package:travel_in_chiangmai/services/item_service.dart';
 import 'package:travel_in_chiangmai/widgets/home_latest_item_card.dart';
 
 class HomeLatestItemSection extends ConsumerWidget {
@@ -46,11 +47,11 @@ class HomeLatestItemSection extends ConsumerWidget {
                   ),
                 ),
               ),
-
             ],
           ),
         ),
 
+        // Show list first and refresh on top
         asyncItems.when(
           loading: () => const Center(
             child: Padding(
@@ -73,14 +74,31 @@ class HomeLatestItemSection extends ConsumerWidget {
               );
             }
 
-            return ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return HomeLatestItemCard(item: items[index]);
+            return RefreshIndicator(
+              onRefresh: () async {
+                // Force refresh but keep old items visible
+                final service = ItemService();
+                final freshItems = await service.fetchItems(
+                  0,
+                  perPage: 5,
+                  orderBy: "created_at",
+                  orderDir: "desc",
+                  forceRefresh: true, // bypass cache
+                  cacheTTL: const Duration(minutes: 10),
+                );
+
+                // Update provider with fresh items
+                ref.invalidate(latestItemsProvider);
               },
+              child: ListView.builder(
+                shrinkWrap: true,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return HomeLatestItemCard(item: items[index]);
+                },
+              ),
             );
           },
         ),
