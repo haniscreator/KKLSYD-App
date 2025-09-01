@@ -62,7 +62,7 @@ class HomeAlbumSection extends ConsumerWidget {
               }
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 itemCount: albums.length,
                 itemBuilder: (context, index) {
                   final album = albums[index];
