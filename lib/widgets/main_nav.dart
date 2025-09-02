@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:travel_in_chiangmai/pages/home_page.dart';
-//import 'package:travel_in_chiangmai/pages/package_page.dart';
-//import 'package:travel_in_chiangmai/pages/profile_page.dart';
 
 
 

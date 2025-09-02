@@ -1,18 +1,26 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:travel_in_chiangmai/const/const.dart';
 import 'package:travel_in_chiangmai/pages/home_page.dart';
 import 'package:travel_in_chiangmai/widgets/onboarding_dots.dart';
+import 'package:travel_in_chiangmai/services/onboarding_service.dart';
 
 class OnboardingBottomPanel extends StatelessWidget {
   final int currentIndex;
-  //final TapGestureRecognizer loginRecognizer;
 
   const OnboardingBottomPanel({
     super.key,
     required this.currentIndex,
-    //required this.loginRecognizer,
   });
+
+  Future<void> _completeOnboarding(BuildContext context) async {
+    await OnBoardingService.completeOnboarding();
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (_) => const HomePage()),
+      (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +43,7 @@ class OnboardingBottomPanel extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const HomePage()),
-                      (route) => false,
-                    );
-                  },
+                  onTap: () => _completeOnboarding(context),
                   child: Container(
                     height: 65,
                     decoration: BoxDecoration(
@@ -80,8 +82,6 @@ class OnboardingBottomPanel extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30),
-    
-                
               ],
             ),
           ),

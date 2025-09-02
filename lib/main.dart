@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_in_chiangmai/pages/splashscreen_page.dart';
 import 'package:travel_in_chiangmai/providers/theme_providers.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  final isFirstLaunch = prefs.getBool('isFirstLaunch') ?? true;
 
   runApp(
-    ProviderScope(
-      child: MyApp(isFirstLaunch: isFirstLaunch),
+    const ProviderScope(
+      child: MyApp(),
     ),
   );
 }
 
 class MyApp extends ConsumerWidget {
-  final bool isFirstLaunch;
-  const MyApp({super.key, required this.isFirstLaunch});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,8 +23,8 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: "KKLSYD",
       debugShowCheckedModeBanner: false,
-      theme: themeState.themeData, // now from Riverpod
-      home: SplashScreenPage(isFirstLaunch: isFirstLaunch),
+      theme: themeState.themeData,
+      home: const SplashScreenPage(),
     );
   }
 }

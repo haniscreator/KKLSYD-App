@@ -52,7 +52,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
             alignment: Alignment.bottomCenter,
             child: OnboardingBottomPanel(
               currentIndex: currentIndex,
-              //loginRecognizer: _loginTapRecognizer,
             ),
           ),
         ],
