@@ -2,13 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/album.dart';
 import '../services/album_service.dart';
 
-/// Service provider
-final albumServiceProvider = Provider<AlbumService>((ref) {
-  return AlbumService();
-});
+final albumServiceProvider = Provider<AlbumService>((ref) => AlbumService());
 
-/// FutureProvider for fetching albums
 final albumsProvider = FutureProvider.autoDispose<List<Album>>((ref) async {
   final service = ref.read(albumServiceProvider);
-  return service.fetchAlbums();
+  return service.fetchAlbums(
+    page: 1,
+    perPage: 10,
+    forceRefresh: false, // use cache by default
+    cacheTTL: const Duration(minutes: 10), // 10 min cache
+  );
 });
