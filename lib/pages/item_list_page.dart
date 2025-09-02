@@ -4,6 +4,8 @@ import 'package:travel_in_chiangmai/models/item.dart';
 import 'package:travel_in_chiangmai/pages/item_search_page.dart';
 import 'package:travel_in_chiangmai/widgets/home_latest_item_card.dart';
 import 'package:travel_in_chiangmai/providers/item_providers.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:lottie/lottie.dart';
 
 class ItemListPage extends ConsumerStatefulWidget {
   const ItemListPage({super.key});
@@ -18,8 +20,16 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-        () => ref.read(itemListProvider.notifier).fetchItems(refresh: true));
+
+    // ✅ Immediately check internet when entering
+    Connectivity().checkConnectivity().then((result) {
+      if (result == ConnectivityResult.none) {
+        ref.read(itemListProvider.notifier).setNoConnection();
+      } else {
+        ref.read(itemListProvider.notifier).fetchItems(refresh: true);
+      }
+    });
+
     _scrollController.addListener(_onScroll);
   }
 
@@ -82,48 +92,77 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () => notifier.fetchItems(refresh: true),
-        child: ListView.separated(
-          controller: _scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          itemCount: (hasActiveFilters ? 1 : 0) +
-              state.items.length +
-              (state.hasMore || state.isLoading ? 1 : 0),
-          separatorBuilder: (_, __) => const SizedBox(height: 8),
-          itemBuilder: (context, index) {
-            if (hasActiveFilters && index == 0) {
-              return _FilterChipsHeader(
-                albumName: state.albumName,
-                searchTerm: state.searchTerm,
-                orderDir: state.orderDir,
-                onClearAlbum: () => notifier.setFilters(albumId: 0, albumName: null),
-                onClearKeyword: () => notifier.setFilters(searchTerm: ""),
-                onClearOrder: () => notifier.setFilters(orderDir: "desc"),
-                onResetAll: notifier.resetFilters,
-              );
-            }
+      body: state.hasConnection
+          ? RefreshIndicator(
+              onRefresh: () => notifier.fetchItems(refresh: true),
+              child: ListView.separated(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                itemCount: (hasActiveFilters ? 1 : 0) +
+                    state.items.length +
+                    (state.hasMore || state.isLoading ? 1 : 0),
+                separatorBuilder: (_, __) => const SizedBox(height: 8),
+                itemBuilder: (context, index) {
+                  if (hasActiveFilters && index == 0) {
+                    return _FilterChipsHeader(
+                      albumName: state.albumName,
+                      searchTerm: state.searchTerm,
+                      orderDir: state.orderDir,
+                      onClearAlbum: () =>
+                          notifier.setFilters(albumId: 0, albumName: null),
+                      onClearKeyword: () =>
+                          notifier.setFilters(searchTerm: ""),
+                      onClearOrder: () =>
+                          notifier.setFilters(orderDir: "desc"),
+                      onResetAll: notifier.resetFilters,
+                    );
+                  }
 
-            final offset = hasActiveFilters ? 1 : 0;
-            final dataIndex = index - offset;
+                  final offset = hasActiveFilters ? 1 : 0;
+                  final dataIndex = index - offset;
 
-            if (dataIndex < state.items.length) {
-              final Item item = state.items[dataIndex];
-              return Padding(
-                key: ValueKey('item_row_${item.id ?? dataIndex}'),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: HomeLatestItemCard(item: item),
-              );
-            }
+                  if (dataIndex < state.items.length) {
+                    final Item item = state.items[dataIndex];
+                    return Padding(
+                      key: ValueKey('item_row_${item.id ?? dataIndex}'),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: HomeLatestItemCard(item: item),
+                    );
+                  }
 
-            return const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(child: CircularProgressIndicator()),
-            );
-          },
-        ),
-      ),
+                  return const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                },
+              ),
+            )
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    'assets/lotties/no_connection.json',
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "အင်တာနက် ချိတ်ဆက်မှုမရှိပါ",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      notifier.fetchItems(refresh: true);
+                    },
+                    child: const Text("ထပ်စမ်းကြည့်ပါ"),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

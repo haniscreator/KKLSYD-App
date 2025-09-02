@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_in_chiangmai/models/album.dart';
 import 'package:travel_in_chiangmai/services/album_service.dart';
 import 'package:travel_in_chiangmai/widgets/home_album_card.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:lottie/lottie.dart';
 
 /// STATE MODEL
 class AlbumListState {
@@ -11,6 +13,7 @@ class AlbumListState {
   final bool hasMore;
   final int page;
   final String searchTerm;
+  final bool hasConnection;
 
   const AlbumListState({
     this.albums = const [],
@@ -18,6 +21,7 @@ class AlbumListState {
     this.hasMore = true,
     this.page = 1,
     this.searchTerm = '',
+    this.hasConnection = true,
   });
 
   AlbumListState copyWith({
@@ -26,6 +30,7 @@ class AlbumListState {
     bool? hasMore,
     int? page,
     String? searchTerm,
+    bool? hasConnection,
   }) {
     return AlbumListState(
       albums: albums ?? this.albums,
@@ -33,6 +38,7 @@ class AlbumListState {
       hasMore: hasMore ?? this.hasMore,
       page: page ?? this.page,
       searchTerm: searchTerm ?? this.searchTerm,
+      hasConnection: hasConnection ?? this.hasConnection,
     );
   }
 }
@@ -47,7 +53,14 @@ class AlbumListNotifier extends StateNotifier<AlbumListState> {
   Future<void> fetchAlbums({bool refresh = false}) async {
     if (state.isLoading) return;
 
-    state = state.copyWith(isLoading: true);
+    // ✅ Check connectivity first
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      state = state.copyWith(hasConnection: false, isLoading: false);
+      return;
+    }
+
+    state = state.copyWith(isLoading: true, hasConnection: true);
 
     try {
       int page = refresh ? 1 : state.page;
@@ -56,7 +69,7 @@ class AlbumListNotifier extends StateNotifier<AlbumListState> {
         page: page,
         perPage: _perPage,
         searchTerm: state.searchTerm,
-        forceRefresh: refresh || page == 1,
+        forceRefresh: true,
       );
 
       state = state.copyWith(
@@ -66,10 +79,16 @@ class AlbumListNotifier extends StateNotifier<AlbumListState> {
       );
     } catch (e) {
       debugPrint('Failed to load albums: $e');
+
+      // ✅ If error is a SocketException, mark as no connection
+      if (e.toString().contains("SocketException")) {
+        state = state.copyWith(hasConnection: false);
+      }
     } finally {
       state = state.copyWith(isLoading: false);
     }
   }
+
 
   void updateSearchTerm(String searchTerm) {
     state = state.copyWith(searchTerm: searchTerm);
@@ -105,8 +124,17 @@ class _AlbumListPageState extends ConsumerState<AlbumListPage> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(
-        () => ref.read(albumListProvider.notifier).fetchAlbums(refresh: true));
+
+    // ✅ Immediately check internet when entering
+    Connectivity().checkConnectivity().then((result) {
+      if (result == ConnectivityResult.none) {
+        ref.read(albumListProvider.notifier).state =
+            ref.read(albumListProvider.notifier).state.copyWith(hasConnection: false);
+      } else {
+        ref.read(albumListProvider.notifier).fetchAlbums(refresh: true);
+      }
+    });
+
     _scrollController.addListener(_onScroll);
   }
 
@@ -160,14 +188,8 @@ class _AlbumListPageState extends ConsumerState<AlbumListPage> {
                   hintText: "Search albums...",
                   border: InputBorder.none,
                 ),
-                onChanged: (value) {
-                  debugPrint("onChanged fired: $value");
-                  _onSearchChanged(value);
-                },
-                onSubmitted: (value) {
-                  debugPrint("onSubmitted fired: $value");
-                  _onSearchChanged(value);
-                },
+                onChanged: _onSearchChanged,
+                onSubmitted: _onSearchChanged,
               )
             : const Text('Albums'),
         actions: [
@@ -182,36 +204,63 @@ class _AlbumListPageState extends ConsumerState<AlbumListPage> {
                 ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () =>
-            ref.read(albumListProvider.notifier).fetchAlbums(refresh: true),
-        child: ListView.separated(
-          controller: _scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          itemCount: state.albums.length + (state.hasMore || state.isLoading ? 1 : 0),
-          separatorBuilder: (_, __) => const SizedBox(height: 8),
-          itemBuilder: (context, index) {
-            if (index < state.albums.length) {
-              final album = state.albums[index];
-              return Padding(
-                key: ValueKey('album_row_${album.id ?? index}'),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: HomeAlbumCard(
-                  album: album,
-                  useHero: false,
-                  fullWidth: true,
-                ),
-              );
-            }
+      body: state.hasConnection
+          ? RefreshIndicator(
+              onRefresh: () =>
+                  ref.read(albumListProvider.notifier).fetchAlbums(refresh: true),
+              child: ListView.separated(
+                controller: _scrollController,
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                itemCount:
+                    state.albums.length + (state.hasMore || state.isLoading ? 1 : 0),
+                separatorBuilder: (_, __) => const SizedBox(height: 8),
+                itemBuilder: (context, index) {
+                  if (index < state.albums.length) {
+                    final album = state.albums[index];
+                    return Padding(
+                      key: ValueKey('album_row_${album.id ?? index}'),
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: HomeAlbumCard(
+                        album: album,
+                        useHero: false,
+                        fullWidth: true,
+                      ),
+                    );
+                  }
 
-            return const Padding(
-              padding: EdgeInsets.all(16),
-              child: Center(child: CircularProgressIndicator()),
-            );
-          },
-        ),
-      ),
+                  return const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                },
+              ),
+            )
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset(
+                    'assets/lotties/no_connection.json',
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "အင်တာနက် ချိတ်ဆက်မှုမရှိပါ",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      ref.read(albumListProvider.notifier).fetchAlbums(refresh: true);
+                    },
+                    child: const Text("ထပ်စမ်းကြည့်ပါ"),
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }

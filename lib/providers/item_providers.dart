@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:travel_in_chiangmai/models/item.dart';
 import 'package:travel_in_chiangmai/services/item_service.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'dart:io';
 
 /// --------------------
 /// ItemList State (Paginated + Searchable + Filterable)
@@ -14,6 +16,7 @@ class ItemListState {
   final int albumId;
   final String? albumName;
   final String orderDir;
+  final bool hasConnection; // ✅ new field
 
   const ItemListState({
     this.items = const [],
@@ -24,6 +27,7 @@ class ItemListState {
     this.albumId = 0,
     this.albumName,
     this.orderDir = "desc",
+    this.hasConnection = true,
   });
 
   ItemListState copyWith({
@@ -35,6 +39,7 @@ class ItemListState {
     int? albumId,
     String? albumName,
     String? orderDir,
+    bool? hasConnection,
   }) {
     return ItemListState(
       items: items ?? this.items,
@@ -47,6 +52,7 @@ class ItemListState {
           ? albumName
           : (albumId == 0 ? null : this.albumName),
       orderDir: orderDir ?? this.orderDir,
+      hasConnection: hasConnection ?? this.hasConnection,
     );
   }
 }
@@ -56,21 +62,31 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
 
   ItemListNotifier(this._itemService) : super(const ItemListState());
 
+  /// --------------------
+  /// Fetch Items (Paginated)
+  /// --------------------
   Future<void> fetchItems({bool refresh = false}) async {
     if (state.isLoading) return;
 
-    state = state.copyWith(isLoading: true);
+    // ✅ Check internet connection first
+    final connectivityResult = await Connectivity().checkConnectivity();
+    if (connectivityResult == ConnectivityResult.none) {
+      state = state.copyWith(hasConnection: false, isLoading: false);
+      return;
+    }
+
+    state = state.copyWith(isLoading: true, hasConnection: true);
 
     try {
       final nextPage = refresh ? 1 : state.page;
+
       final newItems = await _itemService.fetchItems(
         state.albumId,
         perPage: 10,
         orderBy: "created_at",
         orderDir: state.orderDir,
         searchTerm: state.searchTerm,
-        forceRefresh: refresh || nextPage == 1,
-        cacheTTL: const Duration(minutes: 10), // Use 10 min cache
+        forceRefresh: true, // 🔥 always fresh, no cache
       );
 
       state = state.copyWith(
@@ -79,14 +95,20 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
         page: refresh ? 2 : nextPage + 1,
       );
     } catch (e) {
-      // Handle error if needed
       print("Failed to fetch items: $e");
+
+      // ✅ Treat SocketException as no internet
+      if (e is SocketException || e.toString().contains("SocketException")) {
+        state = state.copyWith(hasConnection: false, isLoading: false);
+      }
     } finally {
       state = state.copyWith(isLoading: false);
     }
   }
 
+  /// --------------------
   /// Update filters (album, keyword, sorting)
+  /// --------------------
   void setFilters({
     int? albumId,
     String? albumName,
@@ -105,6 +127,7 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
       items: [],
       hasMore: true,
       page: 1,
+      hasConnection: true,
     );
 
     print("🔹 setFilters called:");
@@ -116,28 +139,44 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
     fetchItems(refresh: true);
   }
 
+  /// --------------------
   /// Reset all filters
+  /// --------------------
   void resetFilters() {
     state = const ItemListState();
     fetchItems(refresh: true);
   }
 
+  /// --------------------
   /// Quick keyword setter
+  /// --------------------
   void setSearchTerm(String term) {
     state = state.copyWith(
       searchTerm: term,
       page: 1,
       items: [],
       hasMore: true,
+      hasConnection: true,
     );
     fetchItems(refresh: true);
   }
+
+  /// --------------------
+  /// Helper: manually set no connection (from UI initState)
+  /// --------------------
+  void setNoConnection() {
+    state = state.copyWith(hasConnection: false, isLoading: false);
+  }
 }
 
+/// --------------------
+/// Provider
+/// --------------------
 final itemListProvider =
     StateNotifierProvider<ItemListNotifier, ItemListState>(
   (ref) => ItemListNotifier(ItemService()),
 );
+
 
 /// --------------------
 /// Latest Items Provider (Homepage Preview with Cache)
@@ -157,3 +196,4 @@ final latestItemsProvider = FutureProvider<List<Item>>((ref) async {
 
   return items;
 });
+
