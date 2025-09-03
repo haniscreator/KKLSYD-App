@@ -1,26 +1,92 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:kklsyd_app/providers/album_providers.dart';
 import 'package:kklsyd_app/providers/item_providers.dart';
 import 'package:kklsyd_app/widgets/home_album_section.dart';
 import 'package:kklsyd_app/widgets/home_latest_item_section.dart';
-import 'package:kklsyd_app/providers/album_providers.dart';
-import 'package:kklsyd_app/widgets/home_appbar_section.dart'; 
+import 'package:kklsyd_app/widgets/home_appbar_section.dart';
 
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final theme = Theme.of(context);
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
 
-    Future<void> _handleRefresh() async {
-      // refresh all async providers
-      ref.refresh(albumsProvider);
-      ref.refresh(latestItemsProvider);
+class _HomePageState extends ConsumerState<HomePage> {
+  ConnectivityResult? _connectivityResult;
+  bool _checkingConnectivity = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkConnectivity();
+  }
+
+  Future<void> _checkConnectivity() async {
+    setState(() {
+      _checkingConnectivity = true;
+    });
+
+    try {
+      final results = await Connectivity().checkConnectivity();
+      // ⚠️ If results is a list, take the first item (or default to none)
+      final result = (results is List<ConnectivityResult> && results.isNotEmpty)
+          ? results.first
+          : ConnectivityResult.none;
+
+      setState(() {
+        _connectivityResult = result;
+        _checkingConnectivity = false;
+      });
+      debugPrint('Connectivity result: $result');
+    } catch (e) {
+      debugPrint('Connectivity check failed: $e');
+      setState(() {
+        _connectivityResult = ConnectivityResult.none;
+        _checkingConnectivity = false;
+      });
+    }
+  }
+
+  Future<void> _handleRefresh() async {
+    ref.refresh(albumsProvider);
+    ref.refresh(latestItemsProvider);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_checkingConnectivity || _connectivityResult == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_connectivityResult == ConnectivityResult.none) {
+      return Scaffold(
+        appBar: const HomeAppBarSection(),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'အင်တာနက် ချိတ်ဆက်မှုမရှိပါ',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _checkConnectivity,
+                child: const Text('ထပ်စမ်းကြည့်ပါ'),
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: const HomeAppBarSection(),
       body: RefreshIndicator(
         onRefresh: _handleRefresh,
