@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:travel_in_chiangmai/const/const.dart';
-import 'package:travel_in_chiangmai/pages/home_page.dart';
-import 'package:travel_in_chiangmai/widgets/onboarding_dots.dart';
-import 'package:travel_in_chiangmai/services/onboarding_service.dart';
+import 'package:kklsyd_app/const/const.dart';
+import 'package:kklsyd_app/pages/home_page.dart';
+import 'package:kklsyd_app/widgets/onboarding_dots.dart';
+import 'package:kklsyd_app/services/onboarding_service.dart';
 
 class OnboardingBottomPanel extends StatelessWidget {
   final int currentIndex;

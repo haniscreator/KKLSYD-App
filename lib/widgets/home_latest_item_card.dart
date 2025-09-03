@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:travel_in_chiangmai/const/const.dart';
-import 'package:travel_in_chiangmai/models/item.dart';
+import 'package:kklsyd_app/const/const.dart';
+import 'package:kklsyd_app/models/item.dart';
 
 class HomeLatestItemCard extends StatefulWidget {
   final Item item;

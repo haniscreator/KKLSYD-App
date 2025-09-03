@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:travel_in_chiangmai/const/const.dart';
-import 'package:travel_in_chiangmai/models/data_model.dart';
+import 'package:kklsyd_app/const/const.dart';
+import 'package:kklsyd_app/models/data_model.dart';
 
 class OnboardingText extends StatelessWidget {
   final int currentIndex;

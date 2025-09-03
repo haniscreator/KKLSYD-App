@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_in_chiangmai/models/item.dart';
-import 'package:travel_in_chiangmai/services/item_service.dart';
+import 'package:kklsyd_app/models/item.dart';
+import 'package:kklsyd_app/services/item_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'dart:io';
 

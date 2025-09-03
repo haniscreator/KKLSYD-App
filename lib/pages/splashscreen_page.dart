@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:travel_in_chiangmai/pages/home_page.dart';
-import 'package:travel_in_chiangmai/pages/onboarding_page.dart';
-import 'package:travel_in_chiangmai/services/onboarding_service.dart';
+import 'package:kklsyd_app/pages/home_page.dart';
+import 'package:kklsyd_app/pages/onboarding_page.dart';
+import 'package:kklsyd_app/services/onboarding_service.dart';
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({super.key});

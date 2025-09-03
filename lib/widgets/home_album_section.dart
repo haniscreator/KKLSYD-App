@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_in_chiangmai/models/album.dart';
-import 'package:travel_in_chiangmai/pages/album_list_page.dart';
-import 'package:travel_in_chiangmai/providers/album_providers.dart';
-import 'package:travel_in_chiangmai/services/album_service.dart';
-import 'package:travel_in_chiangmai/widgets/home_album_card.dart';
-import 'package:travel_in_chiangmai/const/const.dart';
+import 'package:kklsyd_app/models/album.dart';
+import 'package:kklsyd_app/pages/album_list_page.dart';
+import 'package:kklsyd_app/providers/album_providers.dart';
+import 'package:kklsyd_app/services/album_service.dart';
+import 'package:kklsyd_app/widgets/home_album_card.dart';
+import 'package:kklsyd_app/const/const.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class HomeAlbumSection extends ConsumerWidget {

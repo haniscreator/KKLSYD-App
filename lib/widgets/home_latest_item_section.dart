@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_in_chiangmai/const/const.dart';
-import 'package:travel_in_chiangmai/models/item.dart';
-import 'package:travel_in_chiangmai/pages/item_list_page.dart';
-import 'package:travel_in_chiangmai/providers/item_providers.dart';
-import 'package:travel_in_chiangmai/services/item_service.dart';
-import 'package:travel_in_chiangmai/widgets/home_latest_item_card.dart';
+import 'package:kklsyd_app/const/const.dart';
+import 'package:kklsyd_app/models/item.dart';
+import 'package:kklsyd_app/pages/item_list_page.dart';
+import 'package:kklsyd_app/providers/item_providers.dart';
+import 'package:kklsyd_app/services/item_service.dart';
+import 'package:kklsyd_app/widgets/home_latest_item_card.dart';
 
 class HomeLatestItemSection extends ConsumerWidget {
   const HomeLatestItemSection({super.key});

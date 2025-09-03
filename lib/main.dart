@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_in_chiangmai/pages/splashscreen_page.dart';
-import 'package:travel_in_chiangmai/providers/theme_providers.dart';
+import 'package:kklsyd_app/pages/splashscreen_page.dart';
+import 'package:kklsyd_app/providers/theme_providers.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

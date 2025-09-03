@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-//import 'package:travel_in_chiangmai/pages/login_page.dart';
-import 'package:travel_in_chiangmai/widgets/onboarding_image.dart';
-import 'package:travel_in_chiangmai/widgets/onboarding_text.dart';
-import 'package:travel_in_chiangmai/widgets/onboarding_bottom_panel.dart';
-import 'package:travel_in_chiangmai/models/data_model.dart';
+//import 'package:kklsyd_app/pages/login_page.dart';
+import 'package:kklsyd_app/widgets/onboarding_image.dart';
+import 'package:kklsyd_app/widgets/onboarding_text.dart';
+import 'package:kklsyd_app/widgets/onboarding_bottom_panel.dart';
+import 'package:kklsyd_app/models/data_model.dart';
 
 class OnBoardingPage extends StatefulWidget {
   const OnBoardingPage({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:travel_in_chiangmai/animations/glow_avatar.dart';
-import 'package:travel_in_chiangmai/widgets/home_theme_icon.dart';
+import 'package:kklsyd_app/animations/glow_avatar.dart';
+import 'package:kklsyd_app/widgets/home_theme_icon.dart';
 
 class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBarSection({super.key});

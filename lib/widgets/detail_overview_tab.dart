@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:travel_in_chiangmai/const/const.dart';
-import 'package:travel_in_chiangmai/models/item.dart';
-import 'package:travel_in_chiangmai/services/item_service.dart';
-import 'package:travel_in_chiangmai/pages/audioplayer_page.dart';
-import 'package:travel_in_chiangmai/config.dart';
+import 'package:kklsyd_app/const/const.dart';
+import 'package:kklsyd_app/models/item.dart';
+import 'package:kklsyd_app/services/item_service.dart';
+import 'package:kklsyd_app/pages/audioplayer_page.dart';
+import 'package:kklsyd_app/Config/config.dart';
 
 class DetailItemsListTab extends StatefulWidget {
   final int albumId; // ✅ only need albumId now

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_in_chiangmai/models/item.dart';
-import 'package:travel_in_chiangmai/pages/item_search_page.dart';
-import 'package:travel_in_chiangmai/widgets/home_latest_item_card.dart';
-import 'package:travel_in_chiangmai/providers/item_providers.dart';
+import 'package:kklsyd_app/models/item.dart';
+import 'package:kklsyd_app/pages/item_search_page.dart';
+import 'package:kklsyd_app/widgets/home_latest_item_card.dart';
+import 'package:kklsyd_app/providers/item_providers.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:lottie/lottie.dart';
 

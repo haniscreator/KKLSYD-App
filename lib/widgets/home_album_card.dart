@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:travel_in_chiangmai/animations/popin_card_images.dart';
-import 'package:travel_in_chiangmai/const/const.dart';
-import 'package:travel_in_chiangmai/models/album.dart';
-import 'package:travel_in_chiangmai/pages/album_detail_page.dart';
+import 'package:kklsyd_app/animations/popin_card_images.dart';
+import 'package:kklsyd_app/const/const.dart';
+import 'package:kklsyd_app/models/album.dart';
+import 'package:kklsyd_app/pages/album_detail_page.dart';
 
 class HomeAlbumCard extends StatelessWidget {
   final Album album;

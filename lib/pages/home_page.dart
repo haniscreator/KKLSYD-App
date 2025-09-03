@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_in_chiangmai/providers/item_providers.dart';
-import 'package:travel_in_chiangmai/widgets/home_album_section.dart';
-import 'package:travel_in_chiangmai/widgets/home_latest_item_section.dart';
-import 'package:travel_in_chiangmai/providers/album_providers.dart';
-import 'package:travel_in_chiangmai/widgets/home_appbar_section.dart'; 
+import 'package:kklsyd_app/providers/item_providers.dart';
+import 'package:kklsyd_app/widgets/home_album_section.dart';
+import 'package:kklsyd_app/widgets/home_latest_item_section.dart';
+import 'package:kklsyd_app/providers/album_providers.dart';
+import 'package:kklsyd_app/widgets/home_appbar_section.dart'; 
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});

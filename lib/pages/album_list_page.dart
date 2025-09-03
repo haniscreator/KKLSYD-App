@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:travel_in_chiangmai/models/album.dart';
-import 'package:travel_in_chiangmai/services/album_service.dart';
-import 'package:travel_in_chiangmai/widgets/home_album_card.dart';
+import 'package:kklsyd_app/models/album.dart';
+import 'package:kklsyd_app/services/album_service.dart';
+import 'package:kklsyd_app/widgets/home_album_card.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:lottie/lottie.dart';
 

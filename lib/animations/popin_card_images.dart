@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:travel_in_chiangmai/config.dart';
+import 'package:kklsyd_app/Config/config.dart';
 
 class PopInCardImages extends StatefulWidget {
   final String imagePath;
