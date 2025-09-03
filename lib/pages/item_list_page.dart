@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kklsyd_app/models/item.dart';
-import 'package:kklsyd_app/pages/item_search_page.dart';
-import 'package:kklsyd_app/widgets/home_latest_item_card.dart';
-import 'package:kklsyd_app/providers/item_providers.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:lottie/lottie.dart';
+import '../models/item.dart';
+import '../providers/item_providers.dart';
+import '../widgets/home_latest_item_card.dart';
+import 'item_search_page.dart';
 
 class ItemListPage extends ConsumerStatefulWidget {
   const ItemListPage({super.key});
@@ -21,7 +21,7 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
   void initState() {
     super.initState();
 
-    // ✅ Immediately check internet when entering
+    // ✅ Check connectivity first
     Connectivity().checkConnectivity().then((result) {
       if (result == ConnectivityResult.none) {
         ref.read(itemListProvider.notifier).setNoConnection();
@@ -46,7 +46,6 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
     _scrollController.dispose();
     super.dispose();
   }
@@ -58,6 +57,85 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
 
     final bool hasActiveFilters =
         state.albumId != 0 || state.searchTerm.isNotEmpty || state.orderDir != "desc";
+
+    Widget body;
+
+    if (!state.hasConnection && state.items.isEmpty) {
+      body = Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              'assets/lotties/no_connection.json',
+              width: 200,
+              height: 200,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              "အင်တာနက် ချိတ်ဆက်မှုမရှိပါ",
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => notifier.fetchItems(refresh: true),
+              child: const Text("ထပ်စမ်းကြည့်ပါ"),
+            ),
+          ],
+        ),
+      );
+    } else if (state.isLoading && state.items.isEmpty) {
+      body = const Center(child: CircularProgressIndicator());
+    } else {
+      body = RefreshIndicator(
+        onRefresh: () => notifier.fetchItems(refresh: true),
+        child: ListView.separated(
+          controller: _scrollController,
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          itemCount: (hasActiveFilters ? 1 : 0) +
+              state.items.length +
+              (state.hasMore || state.isLoading ? 1 : 0),
+          separatorBuilder: (_, __) => const SizedBox(height: 8),
+          itemBuilder: (context, index) {
+            if (hasActiveFilters && index == 0) {
+              return _FilterChipsHeader(
+                albumName: state.albumName,
+                searchTerm: state.searchTerm,
+                orderDir: state.orderDir,
+                onClearAlbum: () =>
+                    notifier.setFilters(albumId: 0, albumName: null),
+                onClearKeyword: () =>
+                    notifier.setFilters(searchTerm: ""),
+                onClearOrder: () =>
+                    notifier.setFilters(orderDir: "desc"),
+                onResetAll: notifier.resetFilters,
+              );
+            }
+
+            final offset = hasActiveFilters ? 1 : 0;
+            final dataIndex = index - offset;
+
+            if (dataIndex < state.items.length) {
+              final Item item = state.items[dataIndex];
+              return Padding(
+                key: ValueKey('item_row_${item.id ?? dataIndex}'),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: HomeLatestItemCard(item: item),
+              );
+            }
+
+            if (state.isLoading && dataIndex >= state.items.length) {
+              return const Padding(
+                padding: EdgeInsets.all(16),
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            return const SizedBox.shrink();
+          },
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -92,81 +170,14 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
           ),
         ],
       ),
-      body: state.hasConnection
-          ? RefreshIndicator(
-              onRefresh: () => notifier.fetchItems(refresh: true),
-              child: ListView.separated(
-                controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                itemCount: (hasActiveFilters ? 1 : 0) +
-                    state.items.length +
-                    (state.hasMore || state.isLoading ? 1 : 0),
-                separatorBuilder: (_, __) => const SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  if (hasActiveFilters && index == 0) {
-                    return _FilterChipsHeader(
-                      albumName: state.albumName,
-                      searchTerm: state.searchTerm,
-                      orderDir: state.orderDir,
-                      onClearAlbum: () =>
-                          notifier.setFilters(albumId: 0, albumName: null),
-                      onClearKeyword: () =>
-                          notifier.setFilters(searchTerm: ""),
-                      onClearOrder: () =>
-                          notifier.setFilters(orderDir: "desc"),
-                      onResetAll: notifier.resetFilters,
-                    );
-                  }
-
-                  final offset = hasActiveFilters ? 1 : 0;
-                  final dataIndex = index - offset;
-
-                  if (dataIndex < state.items.length) {
-                    final Item item = state.items[dataIndex];
-                    return Padding(
-                      key: ValueKey('item_row_${item.id ?? dataIndex}'),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: HomeLatestItemCard(item: item),
-                    );
-                  }
-
-                  return const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                },
-              ),
-            )
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Lottie.asset(
-                    'assets/lotties/no_connection.json',
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "အင်တာနက် ချိတ်ဆက်မှုမရှိပါ",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      notifier.fetchItems(refresh: true);
-                    },
-                    child: const Text("ထပ်စမ်းကြည့်ပါ"),
-                  ),
-                ],
-              ),
-            ),
+      body: body,
     );
   }
 }
 
+/// --------------------
+/// Filter Chips Header
+/// --------------------
 class _FilterChipsHeader extends StatelessWidget {
   const _FilterChipsHeader({
     required this.albumName,

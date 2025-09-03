@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import 'package:kklsyd_app/const/const.dart';
-import 'package:kklsyd_app/models/item.dart';
-import 'package:kklsyd_app/services/item_service.dart';
 import 'package:kklsyd_app/pages/audioplayer_page.dart';
 import 'package:kklsyd_app/Config/config.dart';
+import 'package:kklsyd_app/providers/album_itemslist_providers.dart';
+import 'package:kklsyd_app/models/item.dart';
 
-class DetailItemsListTab extends StatefulWidget {
-  final int albumId; // ✅ only need albumId now
+class DetailItemsListTab extends ConsumerWidget {
+  final int albumId;
 
   const DetailItemsListTab({
     super.key,
@@ -14,43 +16,72 @@ class DetailItemsListTab extends StatefulWidget {
   });
 
   @override
-  State<DetailItemsListTab> createState() => _DetailItemsListTabState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    // ✅ Always fetch from API (no cache)
+    final asyncItems = ref.watch(detailItemsListProvider(albumId));
 
-class _DetailItemsListTabState extends State<DetailItemsListTab> {
-  late Future<List<Item>> futureItems;
-
-  @override
-  void initState() {
-    super.initState();
-    futureItems = ItemService().fetchItems(widget.albumId); // ✅ use albumId
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return SafeArea(
       top: false,
       bottom: false,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            FutureBuilder<List<Item>>(
-              future: futureItems,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (snapshot.hasError) {
-                  return Text("Error: ${snapshot.error}");
-                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Text("No items found");
-                } else {
-                  final items = snapshot.data!;
+      child: RefreshIndicator(
+        onRefresh: () async {
+          // Force refresh API call
+          ref.refresh(detailItemsListProvider(albumId));
+        },
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              asyncItems.when(
+                loading: () => const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(20),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+                error: (err, _) {
+                  if (err.toString().contains("NO_CONNECTION")) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // ✅ Lottie animation
+                          SizedBox(
+                            height: 180,
+                            child: Lottie.asset(
+                              'assets/lotties/no_connection.json',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            "အင်တာနက် ချိတ်ဆက်ထားခြင်း မရှိပါ။\nPull down to retry.",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+                  return Text("Error: $err");
+                },
+                data: (items) {
+                  if (items.isEmpty) {
+                    return const Padding(
+                      padding: EdgeInsets.all(20),
+                      child: Center(child: Text("No items found")),
+                    );
+                  }
                   return Column(
                     children: List.generate(items.length, (index) {
                       final item = items[index];
-                      return ReviewTile(
+                      return AlbumPlayListTile(
                         name: item.name,
                         comment: item.description,
                         photo: "assets/images/thumbnail/thumbnail4.png",
@@ -58,24 +89,23 @@ class _DetailItemsListTabState extends State<DetailItemsListTab> {
                       );
                     }),
                   );
-                }
-              },
-            ),
-          ],
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-
-class ReviewTile extends StatelessWidget {
+class AlbumPlayListTile extends StatelessWidget {
   final String name;
   final String comment;
   final String photo;
   final String mediaUrl;
 
-  const ReviewTile({
+  const AlbumPlayListTile({
     super.key,
     required this.name,
     required this.comment,
@@ -124,4 +154,3 @@ class ReviewTile extends StatelessWidget {
     );
   }
 }
-
