@@ -42,6 +42,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       });
       debugPrint('Connectivity result: $result');
     } catch (e) {
+      
       debugPrint('Connectivity check failed: $e');
       setState(() {
         _connectivityResult = ConnectivityResult.none;
