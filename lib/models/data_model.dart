@@ -450,31 +450,25 @@ class OnboardModel {
 }
 
 List<OnboardModel> onboarding = [
+   
    OnboardModel(
-    image: 'assets/images/onboarding/8.jpg',
-    title: 'Let the journey begin',
+    image: 'assets/images/splash_bg.png',
+    title: 'ဗုဒ္ဓံပူဇေမိ',
+    description: 'Take only memories, leave only footprints behind.'
+  ),
+   
+   OnboardModel(
+    image: 'assets/images/splash_bg.png',
+    title: 'ဗုဒ္ဓသာသနံ',
     description: 'Travel is the only thing you buy that makes you richer. '
   ),
   OnboardModel(
-    image: 'assets/images/onboarding/1.jpg',
-    title: "Adventure is out there",
+    image: 'assets/images/splash_bg.png',
+    title: "စိရံတိဌတု",
     description: 'Life begins at the end of your comfort zone.'
   ),
-  OnboardModel(
-    image: 'assets/images/onboarding/3.jpg',
-    title: 'Roam far, live free',
-    description: 'Take only memories, leave only footprints behind.'
-  ),
-  OnboardModel(
-    image: 'assets/images/onboarding/7.jpg',
-    title: 'Find joy in the journey',
-    description: 'Jobs fill your pocket, but adventures fill your soul.'
-  ),
-  OnboardModel(
-    image: 'assets/images/onboarding/12.jpg',
-    title: 'Escape the ordinary',
-    description: 'The world is wide, and I want to make memories in it.'
-  ),
+  
+ 
 
   
 ];

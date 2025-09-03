@@ -37,14 +37,10 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              const Color.fromARGB(248, 171, 120, 2).withOpacity(0.9), // top
-              const Color.fromARGB(248, 171, 120, 2).withOpacity(0.6), // bottom
-            ],
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/splash_bg.png'),
+            fit: BoxFit.cover, // fills the screen
           ),
         ),
         child: Center(

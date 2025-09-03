@@ -56,7 +56,7 @@ class OnboardingBottomPanel extends StatelessWidget {
                           blurRadius: 10,
                         ),
                       ],
-                      color: primaryBackgroundColor,
+                      color: commonBlackColor,
                     ),
                     child: const Center(
                       child: Row(
