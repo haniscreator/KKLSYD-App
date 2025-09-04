@@ -26,10 +26,13 @@ class HomeAlbumCard extends StatelessWidget {
     final double cardWidth = fullWidth ? double.infinity : 320;
 
     // ✅ Even/Odd logic for image
+    /*
     final String finalImagePath =
         (index % 2 == 0)
             ? "assets/images/album_cover/2.png"
-            : "assets/images/album_cover/1.png";
+            : "assets/images/album_cover/1.png"; */
+
+    final String finalImagePath = "assets/images/album_cover/1.png";
 
     final card = SizedBox(
       width: cardWidth,
@@ -66,10 +69,10 @@ class HomeAlbumCard extends StatelessWidget {
                     horizontal: 8,
                     vertical: 4,
                   ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.7),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  // decoration: BoxDecoration(
+                  //   color: Colors.white.withOpacity(0.7),
+                  //   borderRadius: BorderRadius.circular(8),
+                  // ),
                   child: Text(
                     album.name,
                     textAlign: TextAlign.center,

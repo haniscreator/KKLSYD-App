@@ -11,18 +11,18 @@ class OnboardModel {
 
 List<OnboardModel> onboarding = [
   OnboardModel(
-    image: 'assets/images/splash_bg.png',
+    image: 'assets/images/splash_bg_3.png',
     title: 'ဗုဒ္ဓံပူဇေမိ',
     description: '',
   ),
 
   OnboardModel(
-    image: 'assets/images/splash_bg.png',
+    image: 'assets/images/splash_bg_3.png',
     title: 'ဗုဒ္ဓသာသနံ',
     description: '',
   ),
   OnboardModel(
-    image: 'assets/images/splash_bg.png',
+    image: 'assets/images/splash_bg_3.png',
     title: "စိရံတိဌတု",
     description: '',
   ),

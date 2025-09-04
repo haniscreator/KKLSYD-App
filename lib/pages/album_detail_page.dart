@@ -58,7 +58,7 @@ class _AlbumDetailPageState extends State<AlbumDetailPage>
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () => Navigator.pop(context),
                 ),
-                title: Text(widget.album.name),
+                title: Text("Album Details"),
               ),
               SliverToBoxAdapter(
                 child: Padding(
@@ -73,7 +73,7 @@ class _AlbumDetailPageState extends State<AlbumDetailPage>
                           widget.coverImagePath,
                           fit: BoxFit.cover,
                           width: double.infinity,
-                          height: 220,
+                          height: 240,
                           errorBuilder: (context, error, stackTrace) {
                             print("Error loading image: $error");
                             return Container(
@@ -96,10 +96,10 @@ class _AlbumDetailPageState extends State<AlbumDetailPage>
                               horizontal: 12,
                               vertical: 6,
                             ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.8),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
+                            // decoration: BoxDecoration(
+                            //   color: Colors.white.withOpacity(0.8),
+                            //   borderRadius: BorderRadius.circular(8),
+                            // ),
                             child: Text(
                               widget.album.name,
                               textAlign: TextAlign.center,

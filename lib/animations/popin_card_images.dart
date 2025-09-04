@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:kklsyd_app/Config/config.dart';
 
 class PopInCardImages extends StatefulWidget {
-  final String imagePath; // ✅ always required now
+  final String imagePath;
   final Duration delay;
   final bool isNetwork;
 

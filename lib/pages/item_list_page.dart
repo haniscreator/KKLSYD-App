@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:kklsyd_app/Config/config.dart';
 import 'package:lottie/lottie.dart';
 import '../models/item.dart';
 import '../providers/item_providers.dart';
 import '../widgets/home_latest_item_card.dart';
 import 'item_search_page.dart';
+import 'audioplayer_page.dart';
 
 class ItemListPage extends ConsumerStatefulWidget {
   const ItemListPage({super.key});
@@ -121,7 +123,29 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
               return Padding(
                 key: ValueKey('item_row_${item.id ?? dataIndex}'),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: HomeLatestItemCard(item: item),
+                child: InkWell(
+                  onTap: () {
+                    final fullAudioUrl = AppConfig.storageUrl + item.mediaUrl;
+
+                    print(
+                      "Tapped item: ID=${item.id}, name=${item.name}, url=$fullAudioUrl",
+                    );
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => AudioPlayerPage(
+                              audioUrl: fullAudioUrl, // ✅ full URL
+                              title: item.name,
+                              image: 'assets/images/thumbnail/thumbnail5.png',
+                            ),
+                      ),
+                    );
+                  },
+
+                  child: HomeLatestItemCard(item: item),
+                ),
               );
             }
 
