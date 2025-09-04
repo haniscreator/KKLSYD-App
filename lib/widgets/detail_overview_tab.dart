@@ -13,7 +13,7 @@ class DetailItemsListTab extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // ✅ Always fetch from API (no cache)
+    // Always fetch from API (no cache)
     final asyncItems = ref.watch(detailItemsListProvider(albumId));
 
     return SafeArea(
@@ -72,7 +72,7 @@ class DetailItemsListTab extends ConsumerWidget {
                   if (items.isEmpty) {
                     return const Padding(
                       padding: EdgeInsets.all(20),
-                      child: Center(child: Text("No items found")),
+                      child: Center(child: Text("တရားတော်များ မရှိသေးပါ။")),
                     );
                   }
                   return Column(

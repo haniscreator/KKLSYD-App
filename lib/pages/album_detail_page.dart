@@ -65,24 +65,94 @@ class _AlbumDetailPageState extends State<AlbumDetailPage>
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      widget.coverImagePath, // ✅ use same image passed
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 220,
-                      errorBuilder: (context, error, stackTrace) {
-                        print("Error loading image: $error");
-                        return Container(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // Album Cover
+                        Image.asset(
+                          widget.coverImagePath,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
                           height: 220,
-                          color: Colors.grey[300],
-                          alignment: Alignment.center,
-                          child: const Icon(
-                            Icons.broken_image,
-                            size: 48,
-                            color: Colors.grey,
+                          errorBuilder: (context, error, stackTrace) {
+                            print("Error loading image: $error");
+                            return Container(
+                              height: 220,
+                              color: Colors.grey[300],
+                              alignment: Alignment.center,
+                              child: const Icon(
+                                Icons.broken_image,
+                                size: 48,
+                                color: Colors.grey,
+                              ),
+                            );
+                          },
+                        ),
+
+                        // Album Name (centered with white bg)
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              widget.album.name,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
                           ),
-                        );
-                      },
+                        ),
+
+                        // Gradient bottom overlay with Location
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.transparent,
+                                  Color.fromARGB(230, 11, 11, 11),
+                                ],
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_on,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    widget.album.location,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

@@ -71,7 +71,7 @@ class HomeLatestItemSection extends ConsumerWidget {
             if (items.isEmpty) {
               return const Padding(
                 padding: EdgeInsets.all(16),
-                child: Text("No items available."),
+                child: Text("တရားတော်များ မရှိသေးပါ။"),
               );
             }
 

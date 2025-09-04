@@ -22,7 +22,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   Future<void> _navigate() async {
     final seenOnboarding = await OnBoardingService.hasSeenOnboarding();
 
-    Timer(const Duration(seconds: 10), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
