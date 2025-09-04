@@ -1,12 +1,11 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:kklsyd_app/Config/config.dart';
 
 class PopInCardImages extends StatefulWidget {
-  final String imagePath;
+  final String imagePath; // ✅ always required now
   final Duration delay;
-  final bool isNetwork; // ✅ true = API, false = local random
+  final bool isNetwork;
 
   const PopInCardImages({
     super.key,
@@ -23,17 +22,12 @@ class _PopInCardImagesState extends State<PopInCardImages>
     with SingleTickerProviderStateMixin {
   double _opacity = 0;
   double _scale = 0.9;
-  late String _randomImage;
 
   @override
   void initState() {
     super.initState();
 
-    // 🎲 Pick a random image for local assets (1.png - 5.png)
-    final random = Random();
-    int randomIndex = random.nextInt(5) + 1; // 1 → 5
-    _randomImage = "assets/images/album_cover/$randomIndex.png";
-
+    // Animate after delay
     Future.delayed(widget.delay, () {
       if (mounted) {
         setState(() {
@@ -62,10 +56,7 @@ class _PopInCardImagesState extends State<PopInCardImages>
                     fit: BoxFit.cover,
                   ),
             )
-            : Image.asset(
-              _randomImage, // ✅ random local image
-              fit: BoxFit.cover,
-            );
+            : Image.asset(widget.imagePath, fit: BoxFit.cover);
 
     return AnimatedOpacity(
       opacity: _opacity,

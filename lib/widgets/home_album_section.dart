@@ -83,6 +83,7 @@ class HomeAlbumSection extends ConsumerWidget {
                       album: albums[index],
                       fullWidth: false,
                       verticalMode: false,
+                      index: index,
                     );
                   },
                 ),

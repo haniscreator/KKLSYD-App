@@ -8,14 +8,16 @@ class HomeAlbumCard extends StatelessWidget {
   final Album album;
   final bool useHero;
   final bool fullWidth;
-  final bool verticalMode; // 👈 new
+  final bool verticalMode;
+  final int index;
 
   const HomeAlbumCard({
     super.key,
     required this.album,
     this.useHero = true,
     this.fullWidth = false,
-    this.verticalMode = false, // 👈 default is horizontal mode
+    this.verticalMode = false,
+    required this.index,
   });
 
   @override
@@ -23,14 +25,20 @@ class HomeAlbumCard extends StatelessWidget {
     final double cardHeight = 250;
     final double cardWidth = fullWidth ? double.infinity : 320;
 
+    // ✅ Even/Odd logic for image
+    final String finalImagePath =
+        (index % 2 == 0)
+            ? "assets/images/album_cover/2.png"
+            : "assets/images/album_cover/1.png";
+
     final card = SizedBox(
       width: cardWidth,
       height: cardHeight,
       child: Container(
         margin: EdgeInsets.only(
           left: fullWidth ? 0 : 12,
-          top: verticalMode ? 12 : 0, // 👈 extra top spacing for vertical
-          bottom: verticalMode ? 12 : 0, // 👈 extra bottom spacing for vertical
+          top: verticalMode ? 12 : 0,
+          bottom: verticalMode ? 12 : 0,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
@@ -47,14 +55,11 @@ class HomeAlbumCard extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              // Cover image
               PopInCardImages(
-                imagePath: album.coverImage,
+                imagePath: finalImagePath,
                 isNetwork: false,
                 delay: const Duration(milliseconds: 150),
               ),
-
-              // Album name (centered, with white bg + shadow for readability)
               Center(
                 child: Container(
                   padding: const EdgeInsets.symmetric(
@@ -85,8 +90,6 @@ class HomeAlbumCard extends StatelessWidget {
                   ),
                 ),
               ),
-
-              // Gradient overlay at bottom
               Positioned(
                 bottom: 0,
                 right: 0,
@@ -109,7 +112,6 @@ class HomeAlbumCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Location row
                       Row(
                         children: [
                           const Icon(
@@ -132,8 +134,6 @@ class HomeAlbumCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 4),
-
-                      // Music count row
                       Row(
                         children: [
                           const Icon(
@@ -164,17 +164,26 @@ class HomeAlbumCard extends StatelessWidget {
 
     final tappable = GestureDetector(
       onTap: () {
+        // 🔹 Debug
+        print(
+          "Tapped AlbumCard: ID=${album.id}, Name=${album.name}, Image=$finalImagePath",
+        );
+
         Navigator.push(
           context,
           MaterialPageRoute(
             builder:
-                (context) => AlbumDetailPage(album: album, initialIndex: 0),
+                (context) => AlbumDetailPage(
+                  album: album,
+                  initialIndex: 0,
+                  coverImagePath: finalImagePath,
+                ),
           ),
         );
       },
       child:
           useHero
-              ? Hero(tag: 'album_${album.id ?? album.name}_image', child: card)
+              ? Hero(tag: 'album_${album.id}_${album.name}_image', child: card)
               : card,
     );
 

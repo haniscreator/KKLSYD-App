@@ -3,16 +3,17 @@ import 'package:kklsyd_app/models/album.dart';
 import 'package:kklsyd_app/widgets/detail_overview_tab.dart';
 import 'package:kklsyd_app/widgets/detail_album_tab_bar.dart';
 import 'package:kklsyd_app/widgets/detail_about_ablum_tab.dart';
-import 'package:kklsyd_app/Config/config.dart';
 
 class AlbumDetailPage extends StatefulWidget {
-  final Album album; // ✅ replace PopularPlaces with Album
+  final Album album;
   final int initialIndex;
+  final String coverImagePath;
 
   const AlbumDetailPage({
     super.key,
     required this.album,
     required this.initialIndex,
+    required this.coverImagePath,
   });
 
   @override
@@ -31,6 +32,11 @@ class _AlbumDetailPageState extends State<AlbumDetailPage>
     _currentIndex = widget.initialIndex;
     _pageController = PageController(initialPage: _currentIndex);
     _tabController = TabController(length: 2, vsync: this);
+
+    // 🔹 Debug
+    print(
+      "AlbumDetailPage init: ID=${widget.album.id}, Name=${widget.album.name}, coverImagePath=${widget.coverImagePath}",
+    );
   }
 
   @override
@@ -42,68 +48,45 @@ class _AlbumDetailPageState extends State<AlbumDetailPage>
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       body: NestedScrollView(
         headerSliverBuilder:
             (context, innerBoxIsScrolled) => [
               SliverAppBar(
                 pinned: true,
-                backgroundColor: theme.appBarTheme.backgroundColor,
-                foregroundColor: theme.appBarTheme.iconTheme?.color,
                 leading: IconButton(
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () => Navigator.pop(context),
                 ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.bookmark_border),
-                    onPressed: () {},
-                  ),
-                ],
-                title: Text(
-                  widget.album.name, // ✅ album name from API
-                  style: theme.appBarTheme.titleTextStyle,
-                ),
+                title: Text(widget.album.name),
               ),
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      AppConfig.storageUrl +
-                          widget
-                              .album
-                              .coverImage, // ✅ use storageUrl from config
+                    child: Image.asset(
+                      widget.coverImagePath, // ✅ use same image passed
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: 220,
-                      errorBuilder:
-                          (context, error, stackTrace) => Container(
-                            height: 220,
-                            color: Colors.grey[300],
-                            alignment: Alignment.center,
-                            child: const Icon(
-                              Icons.broken_image,
-                              size: 48,
-                              color: Colors.grey,
-                            ),
-                          ),
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) return child;
+                      errorBuilder: (context, error, stackTrace) {
+                        print("Error loading image: $error");
                         return Container(
                           height: 220,
+                          color: Colors.grey[300],
                           alignment: Alignment.center,
-                          child: const CircularProgressIndicator(),
+                          child: const Icon(
+                            Icons.broken_image,
+                            size: 48,
+                            color: Colors.grey,
+                          ),
                         );
                       },
                     ),
                   ),
                 ),
               ),
-
               DetailAlbumTabBar(tabController: _tabController),
             ],
         body: TabBarView(
