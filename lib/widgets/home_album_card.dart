@@ -8,25 +8,30 @@ class HomeAlbumCard extends StatelessWidget {
   final Album album;
   final bool useHero;
   final bool fullWidth;
+  final bool verticalMode; // 👈 new
 
   const HomeAlbumCard({
     super.key,
     required this.album,
     this.useHero = true,
     this.fullWidth = false,
+    this.verticalMode = false, // 👈 default is horizontal mode
   });
 
   @override
   Widget build(BuildContext context) {
-    // 🔑 Fixed height in vertical list mode
-    final double cardHeight = fullWidth ? 230 : 230;
+    final double cardHeight = 250;
     final double cardWidth = fullWidth ? double.infinity : 320;
 
     final card = SizedBox(
       width: cardWidth,
       height: cardHeight,
       child: Container(
-        margin: EdgeInsets.only(left: fullWidth ? 0 : 12),
+        margin: EdgeInsets.only(
+          left: fullWidth ? 0 : 12,
+          top: verticalMode ? 12 : 0, // 👈 extra top spacing for vertical
+          bottom: verticalMode ? 12 : 0, // 👈 extra bottom spacing for vertical
+        ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           boxShadow: const [
@@ -81,7 +86,7 @@ class HomeAlbumCard extends StatelessWidget {
                 ),
               ),
 
-              // Gradient overlay at bottom (location + music stacked)
+              // Gradient overlay at bottom
               Positioned(
                 bottom: 0,
                 right: 0,

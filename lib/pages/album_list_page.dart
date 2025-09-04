@@ -231,6 +231,7 @@ class _AlbumListPageState extends ConsumerState<AlbumListPage> {
                           album: album,
                           useHero: false,
                           fullWidth: true,
+                          verticalMode: true,
                         ),
                       );
                     }

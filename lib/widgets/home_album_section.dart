@@ -79,7 +79,11 @@ class HomeAlbumSection extends ConsumerWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   itemCount: albums.length,
                   itemBuilder: (context, index) {
-                    return HomeAlbumCard(album: albums[index]);
+                    return HomeAlbumCard(
+                      album: albums[index],
+                      fullWidth: false,
+                      verticalMode: false,
+                    );
                   },
                 ),
               );
