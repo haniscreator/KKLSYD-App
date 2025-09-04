@@ -32,9 +32,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     try {
       final results = await Connectivity().checkConnectivity();
       // ⚠️ If results is a list, take the first item (or default to none)
-      final result = (results is List<ConnectivityResult> && results.isNotEmpty)
-          ? results.first
-          : ConnectivityResult.none;
+      final result =
+          (results is List<ConnectivityResult> && results.isNotEmpty)
+              ? results.first
+              : ConnectivityResult.none;
 
       setState(() {
         _connectivityResult = result;
@@ -42,7 +43,6 @@ class _HomePageState extends ConsumerState<HomePage> {
       });
       debugPrint('Connectivity result: $result');
     } catch (e) {
-      
       debugPrint('Connectivity check failed: $e');
       setState(() {
         _connectivityResult = ConnectivityResult.none;
@@ -59,9 +59,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (_checkingConnectivity || _connectivityResult == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (_connectivityResult == ConnectivityResult.none) {
@@ -93,7 +91,12 @@ class _HomePageState extends ConsumerState<HomePage> {
         onRefresh: _handleRefresh,
         child: ListView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.only(top: 20, left: 0, right: 0, bottom: 16),
+          padding: const EdgeInsets.only(
+            top: 20,
+            left: 0,
+            right: 0,
+            bottom: 16,
+          ),
           children: const [
             HomeAlbumSection(),
             SizedBox(height: 20),

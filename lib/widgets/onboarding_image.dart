@@ -8,10 +8,6 @@ class OnboardingImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      onboarding[index].image,
-      fit: BoxFit.cover,
-      );
-    
+    return Image.asset(onboarding[index].image, fit: BoxFit.cover);
   }
 }

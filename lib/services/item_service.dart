@@ -14,8 +14,8 @@ class ItemService {
     String orderBy = "created_at",
     String orderDir = "desc",
     String? searchTerm,
-    bool forceRefresh = false,  // bypass cache if true
-    bool useCache = true,       // enable cache read/write
+    bool forceRefresh = false, // bypass cache if true
+    bool useCache = true, // enable cache read/write
     Duration? cacheTTL,
   }) async {
     final url = Uri.parse(AppConfig.items);

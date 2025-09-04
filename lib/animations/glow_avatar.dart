@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class GlowAvatar extends StatefulWidget {
   final double radius;
   final String imagePath;

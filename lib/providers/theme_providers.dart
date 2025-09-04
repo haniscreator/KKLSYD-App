@@ -34,9 +34,9 @@ class ThemeNotifier extends StateNotifier<ThemeState> {
       ),
       iconTheme: const IconThemeData(color: Colors.black),
       textTheme: ThemeData.light().textTheme.apply(
-            bodyColor: Colors.black,
-            displayColor: Colors.black,
-          ),
+        bodyColor: Colors.black,
+        displayColor: Colors.black,
+      ),
     ),
     appTheme: AppTheme.light,
   );
@@ -53,9 +53,9 @@ class ThemeNotifier extends StateNotifier<ThemeState> {
       ),
       iconTheme: const IconThemeData(color: Colors.white),
       textTheme: ThemeData.dark().textTheme.apply(
-            bodyColor: Colors.white,
-            displayColor: Colors.white,
-          ),
+        bodyColor: Colors.white,
+        displayColor: Colors.white,
+      ),
     ),
     appTheme: AppTheme.dark,
   );
@@ -79,5 +79,6 @@ class ThemeNotifier extends StateNotifier<ThemeState> {
 }
 
 /// Riverpod provider
-final themeProvider =
-    StateNotifierProvider<ThemeNotifier, ThemeState>((ref) => ThemeNotifier());
+final themeProvider = StateNotifierProvider<ThemeNotifier, ThemeState>(
+  (ref) => ThemeNotifier(),
+);

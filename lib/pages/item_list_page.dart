@@ -56,7 +56,9 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
     final notifier = ref.read(itemListProvider.notifier);
 
     final bool hasActiveFilters =
-        state.albumId != 0 || state.searchTerm.isNotEmpty || state.orderDir != "desc";
+        state.albumId != 0 ||
+        state.searchTerm.isNotEmpty ||
+        state.orderDir != "desc";
 
     Widget body;
 
@@ -92,7 +94,8 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
           controller: _scrollController,
           physics: const AlwaysScrollableScrollPhysics(),
           padding: const EdgeInsets.symmetric(vertical: 8),
-          itemCount: (hasActiveFilters ? 1 : 0) +
+          itemCount:
+              (hasActiveFilters ? 1 : 0) +
               state.items.length +
               (state.hasMore || state.isLoading ? 1 : 0),
           separatorBuilder: (_, __) => const SizedBox(height: 8),
@@ -102,12 +105,10 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
                 albumName: state.albumName,
                 searchTerm: state.searchTerm,
                 orderDir: state.orderDir,
-                onClearAlbum: () =>
-                    notifier.setFilters(albumId: 0, albumName: null),
-                onClearKeyword: () =>
-                    notifier.setFilters(searchTerm: ""),
-                onClearOrder: () =>
-                    notifier.setFilters(orderDir: "desc"),
+                onClearAlbum:
+                    () => notifier.setFilters(albumId: 0, albumName: null),
+                onClearKeyword: () => notifier.setFilters(searchTerm: ""),
+                onClearOrder: () => notifier.setFilters(orderDir: "desc"),
                 onResetAll: notifier.resetFilters,
               );
             }
@@ -213,10 +214,7 @@ class _FilterChipsHeader extends StatelessWidget {
               spacing: 8,
               runSpacing: 4,
               children: [
-                Chip(
-                  label: Text("Album: $albumName"),
-                  onDeleted: onClearAlbum,
-                ),
+                Chip(label: Text("Album: $albumName"), onDeleted: onClearAlbum),
               ],
             ),
           const SizedBox(height: 4),

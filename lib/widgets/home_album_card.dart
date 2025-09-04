@@ -52,8 +52,10 @@ class HomeAlbumCard extends StatelessWidget {
               // Album name (centered, with white bg + shadow for readability)
               Center(
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.7),
                     borderRadius: BorderRadius.circular(8),
@@ -160,17 +162,15 @@ class HomeAlbumCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                AlbumDetailPage(album: album, initialIndex: 0),
+            builder:
+                (context) => AlbumDetailPage(album: album, initialIndex: 0),
           ),
         );
       },
-      child: useHero
-          ? Hero(
-              tag: 'album_${album.id ?? album.name}_image',
-              child: card,
-            )
-          : card,
+      child:
+          useHero
+              ? Hero(tag: 'album_${album.id ?? album.name}_image', child: card)
+              : card,
     );
 
     return Semantics(container: true, child: tappable);

@@ -14,18 +14,11 @@ class HomeNotificationIcon extends StatelessWidget {
       padding: const EdgeInsets.all(7),
       child: const Stack(
         children: [
-          Icon(
-            Iconsax.notification,
-            color: Colors.black,
-            size: 30,
-          ),
+          Icon(Iconsax.notification, color: Colors.black, size: 30),
           Positioned(
             top: 5,
             right: 5,
-            child: CircleAvatar(
-              radius: 5,
-              backgroundColor: Colors.red,
-            ),
+            child: CircleAvatar(radius: 5, backgroundColor: Colors.red),
           ),
         ],
       ),

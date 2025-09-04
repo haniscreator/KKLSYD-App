@@ -55,54 +55,58 @@ class HomeAlbumSection extends ConsumerWidget {
 
         // Albums List
         SizedBox(
-        height: 210,
-        child: asyncAlbums.when(
-          data: (albums) {
-            if (albums.isEmpty) return const Center(child: Text("No albums found"));
+          height: 210,
+          child: asyncAlbums.when(
+            data: (albums) {
+              if (albums.isEmpty)
+                return const Center(child: Text("No albums found"));
 
-            return RefreshIndicator(
-              onRefresh: () async {
-                final service = AlbumService();
-                await service.fetchAlbums(
-                  page: 1,
-                  perPage: 10,
-                  forceRefresh: true,
-                  cacheTTL: const Duration(minutes: 10),
-                );
-                ref.invalidate(albumsProvider); // reload provider with fresh data
-              },
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                itemCount: albums.length,
-                itemBuilder: (context, index) {
-                  return HomeAlbumCard(album: albums[index]);
+              return RefreshIndicator(
+                onRefresh: () async {
+                  final service = AlbumService();
+                  await service.fetchAlbums(
+                    page: 1,
+                    perPage: 10,
+                    forceRefresh: true,
+                    cacheTTL: const Duration(minutes: 10),
+                  );
+                  ref.invalidate(
+                    albumsProvider,
+                  ); // reload provider with fresh data
                 },
-              ),
-            );
-          },
-          loading: () => ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: 4,
-            itemBuilder: (context, index) => Padding(
-              padding: const EdgeInsets.only(right: 12),
-              child: Shimmer(
-                child: Container(
-                  width: 320,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  itemCount: albums.length,
+                  itemBuilder: (context, index) {
+                    return HomeAlbumCard(album: albums[index]);
+                  },
                 ),
-              ),
-            ),
+              );
+            },
+            loading:
+                () => ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: 4,
+                  itemBuilder:
+                      (context, index) => Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: Shimmer(
+                          child: Container(
+                            width: 320,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
+                      ),
+                ),
+            error: (_, __) => const Center(child: Text("Error loading albums")),
           ),
-          error: (_, __) => const Center(child: Text("Error loading albums")),
         ),
-      )
-
       ],
     );
   }

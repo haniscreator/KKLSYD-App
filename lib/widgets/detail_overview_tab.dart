@@ -10,10 +10,7 @@ import 'package:kklsyd_app/models/item.dart';
 class DetailItemsListTab extends ConsumerWidget {
   final int albumId;
 
-  const DetailItemsListTab({
-    super.key,
-    required this.albumId,
-  });
+  const DetailItemsListTab({super.key, required this.albumId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,12 +32,13 @@ class DetailItemsListTab extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               asyncItems.when(
-                loading: () => const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: CircularProgressIndicator(),
-                  ),
-                ),
+                loading:
+                    () => const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
                 error: (err, _) {
                   if (err.toString().contains("NO_CONNECTION")) {
                     return Center(
@@ -122,23 +120,19 @@ class AlbumPlayListTile extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AudioPlayerPage(
-                audioUrl: mediaUrl,
-                title: name,
-                image: 'assets/images/thumbnail/thumbnail4.png',
-              ),
+              builder:
+                  (context) => AudioPlayerPage(
+                    audioUrl: mediaUrl,
+                    title: name,
+                    image: 'assets/images/thumbnail/thumbnail4.png',
+                  ),
             ),
           );
         },
         contentPadding: const EdgeInsets.all(8),
         leading: ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: Image.asset(
-            photo,
-            width: 50,
-            height: 50,
-            fit: BoxFit.cover,
-          ),
+          child: Image.asset(photo, width: 50, height: 50, fit: BoxFit.cover),
         ),
         title: Text(name),
         subtitle: Text(comment, maxLines: 2, overflow: TextOverflow.ellipsis),

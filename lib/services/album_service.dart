@@ -44,7 +44,8 @@ class AlbumService {
     final body = {
       "page": page,
       "per_page": perPage,
-      if (searchTerm != null && searchTerm.isNotEmpty) "search_term": searchTerm,
+      if (searchTerm != null && searchTerm.isNotEmpty)
+        "search_term": searchTerm,
     };
 
     final response = await http.post(

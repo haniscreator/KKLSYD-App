@@ -53,19 +53,21 @@ class HomeLatestItemSection extends ConsumerWidget {
 
         // Show list first and refresh on top
         asyncItems.when(
-          loading: () => const Center(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: CircularProgressIndicator(),
-            ),
-          ),
-          error: (error, _) => Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              "Failed to load items: $error",
-              style: const TextStyle(color: Colors.red),
-            ),
-          ),
+          loading:
+              () => const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16),
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+          error:
+              (error, _) => Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  "Failed to load items: $error",
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
           data: (items) {
             if (items.isEmpty) {
               return const Padding(

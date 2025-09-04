@@ -89,7 +89,6 @@ class AlbumListNotifier extends StateNotifier<AlbumListState> {
     }
   }
 
-
   void updateSearchTerm(String searchTerm) {
     state = state.copyWith(searchTerm: searchTerm);
     fetchAlbums(refresh: true);
@@ -104,8 +103,8 @@ class AlbumListNotifier extends StateNotifier<AlbumListState> {
 /// PROVIDER
 final albumListProvider =
     StateNotifierProvider<AlbumListNotifier, AlbumListState>((ref) {
-  return AlbumListNotifier();
-});
+      return AlbumListNotifier();
+    });
 
 /// UI
 class AlbumListPage extends ConsumerStatefulWidget {
@@ -128,8 +127,10 @@ class _AlbumListPageState extends ConsumerState<AlbumListPage> {
     // ✅ Immediately check internet when entering
     Connectivity().checkConnectivity().then((result) {
       if (result == ConnectivityResult.none) {
-        ref.read(albumListProvider.notifier).state =
-            ref.read(albumListProvider.notifier).state.copyWith(hasConnection: false);
+        ref.read(albumListProvider.notifier).state = ref
+            .read(albumListProvider.notifier)
+            .state
+            .copyWith(hasConnection: false);
       } else {
         ref.read(albumListProvider.notifier).fetchAlbums(refresh: true);
       }
@@ -180,87 +181,97 @@ class _AlbumListPageState extends ConsumerState<AlbumListPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: _isSearching
-            ? TextField(
-                controller: _searchController,
-                autofocus: true,
-                decoration: const InputDecoration(
-                  hintText: "Search albums...",
-                  border: InputBorder.none,
-                ),
-                onChanged: _onSearchChanged,
-                onSubmitted: _onSearchChanged,
-              )
-            : const Text('Albums'),
+        title:
+            _isSearching
+                ? TextField(
+                  controller: _searchController,
+                  autofocus: true,
+                  decoration: const InputDecoration(
+                    hintText: "Search albums...",
+                    border: InputBorder.none,
+                  ),
+                  onChanged: _onSearchChanged,
+                  onSubmitted: _onSearchChanged,
+                )
+                : const Text('Albums'),
         actions: [
           _isSearching
               ? IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: _stopSearch,
-                )
+                icon: const Icon(Icons.close),
+                onPressed: _stopSearch,
+              )
               : IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: _startSearch,
-                ),
+                icon: const Icon(Icons.search),
+                onPressed: _startSearch,
+              ),
         ],
       ),
-      body: state.hasConnection
-          ? RefreshIndicator(
-              onRefresh: () =>
-                  ref.read(albumListProvider.notifier).fetchAlbums(refresh: true),
-              child: ListView.separated(
-                controller: _scrollController,
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                itemCount:
-                    state.albums.length + (state.hasMore || state.isLoading ? 1 : 0),
-                separatorBuilder: (_, __) => const SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  if (index < state.albums.length) {
-                    final album = state.albums[index];
-                    return Padding(
-                      key: ValueKey('album_row_${album.id ?? index}'),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: HomeAlbumCard(
-                        album: album,
-                        useHero: false,
-                        fullWidth: true,
-                      ),
-                    );
-                  }
+      body:
+          state.hasConnection
+              ? RefreshIndicator(
+                onRefresh:
+                    () => ref
+                        .read(albumListProvider.notifier)
+                        .fetchAlbums(refresh: true),
+                child: ListView.separated(
+                  controller: _scrollController,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  itemCount:
+                      state.albums.length +
+                      (state.hasMore || state.isLoading ? 1 : 0),
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    if (index < state.albums.length) {
+                      final album = state.albums[index];
+                      return Padding(
+                        key: ValueKey('album_row_${album.id ?? index}'),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: HomeAlbumCard(
+                          album: album,
+                          useHero: false,
+                          fullWidth: true,
+                        ),
+                      );
+                    }
 
-                  return const Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                },
+                    return const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  },
+                ),
+              )
+              : Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Lottie.asset(
+                      'assets/lotties/no_connection.json',
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "အင်တာနက် ချိတ်ဆက်မှုမရှိပါ",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        ref
+                            .read(albumListProvider.notifier)
+                            .fetchAlbums(refresh: true);
+                      },
+                      child: const Text("ထပ်စမ်းကြည့်ပါ"),
+                    ),
+                  ],
+                ),
               ),
-            )
-          : Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Lottie.asset(
-                    'assets/lotties/no_connection.json',
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "အင်တာနက် ချိတ်ဆက်မှုမရှိပါ",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.read(albumListProvider.notifier).fetchAlbums(refresh: true);
-                    },
-                    child: const Text("ထပ်စမ်းကြည့်ပါ"),
-                  ),
-                ],
-              ),
-            ),
     );
   }
 }

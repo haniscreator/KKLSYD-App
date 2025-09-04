@@ -46,23 +46,26 @@ class _PopInCardImagesState extends State<PopInCardImages>
 
   @override
   Widget build(BuildContext context) {
-    final imageWidget = widget.isNetwork
-        ? CachedNetworkImage(
-            imageUrl: AppConfig.storageUrl + widget.imagePath,
-            fit: BoxFit.cover,
-            placeholder: (context, url) => Image.asset(
-              "assets/images/default_cover.png",
+    final imageWidget =
+        widget.isNetwork
+            ? CachedNetworkImage(
+              imageUrl: AppConfig.storageUrl + widget.imagePath,
               fit: BoxFit.cover,
-            ),
-            errorWidget: (context, url, error) => Image.asset(
-              "assets/images/default_cover.png",
+              placeholder:
+                  (context, url) => Image.asset(
+                    "assets/images/default_cover.png",
+                    fit: BoxFit.cover,
+                  ),
+              errorWidget:
+                  (context, url, error) => Image.asset(
+                    "assets/images/default_cover.png",
+                    fit: BoxFit.cover,
+                  ),
+            )
+            : Image.asset(
+              _randomImage, // ✅ random local image
               fit: BoxFit.cover,
-            ),
-          )
-        : Image.asset(
-            _randomImage, // ✅ random local image
-            fit: BoxFit.cover,
-          );
+            );
 
     return AnimatedOpacity(
       opacity: _opacity,

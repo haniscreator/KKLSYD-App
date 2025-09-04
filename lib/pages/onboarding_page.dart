@@ -20,16 +20,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   @override
   void initState() {
     super.initState();
-    
   }
-
 
   @override
   void dispose() {
     //_loginTapRecognizer.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -50,9 +47,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
           OnboardingText(currentIndex: currentIndex),
           Align(
             alignment: Alignment.bottomCenter,
-            child: OnboardingBottomPanel(
-              currentIndex: currentIndex,
-            ),
+            child: OnboardingBottomPanel(currentIndex: currentIndex),
           ),
         ],
       ),

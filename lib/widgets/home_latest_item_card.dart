@@ -8,8 +8,7 @@ class HomeLatestItemCard extends StatefulWidget {
   const HomeLatestItemCard({super.key, required this.item});
 
   @override
-  State<HomeLatestItemCard> createState() =>
-      _HomeLatestItemCardState();
+  State<HomeLatestItemCard> createState() => _HomeLatestItemCardState();
 }
 
 class _HomeLatestItemCardState extends State<HomeLatestItemCard>
@@ -88,15 +87,16 @@ class _HomeLatestItemCardState extends State<HomeLatestItemCard>
               decoration: BoxDecoration(
                 color: theme.cardColor,
                 borderRadius: BorderRadius.circular(12),
-                boxShadow: isDark
-                    ? []
-                    : [
-                        const BoxShadow(
-                          color: Color.fromRGBO(0, 0, 0, 0.07),
-                          blurRadius: 6,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
+                boxShadow:
+                    isDark
+                        ? []
+                        : [
+                          const BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, 0.07),
+                            blurRadius: 6,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
               ),
               child: Row(
                 children: [
@@ -126,8 +126,11 @@ class _HomeLatestItemCardState extends State<HomeLatestItemCard>
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            Icon(Icons.folder_rounded,
-                                size: 16, color: theme.hintColor),
+                            Icon(
+                              Icons.folder_rounded,
+                              size: 16,
+                              color: theme.hintColor,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               item.album,

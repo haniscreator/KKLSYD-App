@@ -43,13 +43,9 @@ class _FadeInGalleryImageState extends State<SlideInFadeInGalleryImage> {
         curve: Curves.easeOut,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(8),
-          child: Image.asset(
-            widget.imagePath,
-            fit: BoxFit.cover,
-          ),
+          child: Image.asset(widget.imagePath, fit: BoxFit.cover),
         ),
       ),
     );
   }
 }
-

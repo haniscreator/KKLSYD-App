@@ -2,7 +2,6 @@
 // import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 // import 'package:kklsyd_app/models/data_model.dart';
 
-
 // class DetailPlaceImageCarousel extends StatelessWidget {
 //   //final Places place;
 //   final PopularPlaces place;

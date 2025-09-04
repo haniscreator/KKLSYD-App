@@ -20,7 +20,9 @@ class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
             return Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
               ),
               padding: const EdgeInsets.all(24.0),
               child: SingleChildScrollView(
@@ -90,17 +92,11 @@ class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
               children: const [
                 Text(
                   "Welcome back,",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
                 Text(
                   "Makenna Donin", // later replace with dynamic data
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -110,10 +106,7 @@ class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                Icons.flash_on,
-                color: Theme.of(context).iconTheme.color,
-              ),
+              Icon(Icons.flash_on, color: Theme.of(context).iconTheme.color),
               const SizedBox(width: 12),
               const HomeThemeIcon(),
             ],

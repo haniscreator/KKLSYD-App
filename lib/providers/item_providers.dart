@@ -49,9 +49,10 @@ class ItemListState {
       page: page ?? this.page,
       searchTerm: searchTerm ?? this.searchTerm,
       albumId: albumId ?? this.albumId,
-      albumName: albumName != null
-          ? albumName
-          : (albumId == 0 ? null : this.albumName),
+      albumName:
+          albumName != null
+              ? albumName
+              : (albumId == 0 ? null : this.albumName),
       orderDir: orderDir ?? this.orderDir,
       hasConnection: hasConnection ?? this.hasConnection,
     );
@@ -67,56 +68,55 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
   ItemListNotifier(this._itemService) : super(const ItemListState());
 
   Future<void> fetchItems({bool refresh = false}) async {
-  try {
-    // ✅ Check connectivity first
-    final connectivityResult = await Connectivity().checkConnectivity();
-    if (connectivityResult == ConnectivityResult.none) {
-      state = state.copyWith(
-        isLoading: false,
-        hasConnection: false,
-        items: [], // clear items when offline
+    try {
+      // ✅ Check connectivity first
+      final connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult == ConnectivityResult.none) {
+        state = state.copyWith(
+          isLoading: false,
+          hasConnection: false,
+          items: [], // clear items when offline
+        );
+        return;
+      }
+
+      if (state.isLoading) return;
+
+      state = state.copyWith(isLoading: true, hasConnection: true);
+
+      final nextPage = refresh ? 1 : state.page;
+
+      final newItems = await _itemService.fetchItems(
+        state.albumId,
+        perPage: 10,
+        orderBy: "created_at",
+        orderDir: state.orderDir,
+        searchTerm: state.searchTerm,
+        forceRefresh: true, // ✅ Always fresh, ignore cache
       );
-      return;
-    }
 
-    if (state.isLoading) return;
-
-    state = state.copyWith(isLoading: true, hasConnection: true);
-
-    final nextPage = refresh ? 1 : state.page;
-
-    final newItems = await _itemService.fetchItems(
-      state.albumId,
-      perPage: 10,
-      orderBy: "created_at",
-      orderDir: state.orderDir,
-      searchTerm: state.searchTerm,
-      forceRefresh: true, // ✅ Always fresh, ignore cache
-    );
-
-    state = state.copyWith(
-      items: refresh ? newItems : [...state.items, ...newItems],
-      hasMore: newItems.length == 10,
-      page: refresh ? 2 : nextPage + 1,
-      isLoading: false,
-      hasConnection: true,
-    );
-  } catch (e) {
-    // ✅ Catch NO_CONNECTION and other exceptions
-    if (e.toString().contains("NO_CONNECTION") ||
-        e.toString().contains("SocketException")) {
       state = state.copyWith(
+        items: refresh ? newItems : [...state.items, ...newItems],
+        hasMore: newItems.length == 10,
+        page: refresh ? 2 : nextPage + 1,
         isLoading: false,
-        hasConnection: false,
-        items: [], // clear cached items
+        hasConnection: true,
       );
-    } else {
-      debugPrint('Failed to load albums: $e');
-      state = state.copyWith(isLoading: false, items: []);
+    } catch (e) {
+      // ✅ Catch NO_CONNECTION and other exceptions
+      if (e.toString().contains("NO_CONNECTION") ||
+          e.toString().contains("SocketException")) {
+        state = state.copyWith(
+          isLoading: false,
+          hasConnection: false,
+          items: [], // clear cached items
+        );
+      } else {
+        debugPrint('Failed to load albums: $e');
+        state = state.copyWith(isLoading: false, items: []);
+      }
     }
   }
-}
-
 
   void setFilters({
     int? albumId,
@@ -124,9 +124,10 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
     String? searchTerm,
     String? orderDir,
   }) {
-    final resolvedAlbumName = (albumId != null && albumId == 0)
-        ? null
-        : (albumName ?? state.albumName);
+    final resolvedAlbumName =
+        (albumId != null && albumId == 0)
+            ? null
+            : (albumName ?? state.albumName);
 
     state = state.copyWith(
       albumId: albumId ?? state.albumId,
@@ -155,10 +156,9 @@ class ItemListNotifier extends StateNotifier<ItemListState> {
 /// --------------------
 /// Provider
 /// --------------------
-final itemListProvider =
-    StateNotifierProvider<ItemListNotifier, ItemListState>(
-        (ref) => ItemListNotifier(ItemService()));
-
+final itemListProvider = StateNotifierProvider<ItemListNotifier, ItemListState>(
+  (ref) => ItemListNotifier(ItemService()),
+);
 
 /// Latest Items (Homepage Preview with cache)
 final latestItemsProvider = FutureProvider<List<Item>>((ref) async {
@@ -169,7 +169,7 @@ final latestItemsProvider = FutureProvider<List<Item>>((ref) async {
     orderBy: "created_at",
     orderDir: "desc",
     forceRefresh: false,
-    useCache: true,                 // ✅ allow cache
+    useCache: true, // ✅ allow cache
     cacheTTL: const Duration(minutes: 10),
   );
   return items;

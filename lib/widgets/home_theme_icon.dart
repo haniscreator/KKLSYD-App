@@ -21,4 +21,3 @@ class HomeThemeIcon extends ConsumerWidget {
     );
   }
 }
-

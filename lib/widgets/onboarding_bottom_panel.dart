@@ -7,10 +7,7 @@ import 'package:kklsyd_app/services/onboarding_service.dart';
 class OnboardingBottomPanel extends StatelessWidget {
   final int currentIndex;
 
-  const OnboardingBottomPanel({
-    super.key,
-    required this.currentIndex,
-  });
+  const OnboardingBottomPanel({super.key, required this.currentIndex});
 
   Future<void> _completeOnboarding(BuildContext context) async {
     await OnBoardingService.completeOnboarding();
@@ -75,7 +72,7 @@ class OnboardingBottomPanel extends StatelessWidget {
                             Icons.arrow_forward,
                             color: Colors.white,
                             size: 22,
-                          )
+                          ),
                         ],
                       ),
                     ),

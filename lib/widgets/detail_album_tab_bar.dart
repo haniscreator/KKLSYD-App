@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 class DetailAlbumTabBar extends StatelessWidget {
   final TabController tabController;
 
-  const DetailAlbumTabBar({
-    super.key,
-    required this.tabController,
-  });
+  const DetailAlbumTabBar({super.key, required this.tabController});
 
   @override
   Widget build(BuildContext context) {
@@ -17,15 +14,15 @@ class DetailAlbumTabBar extends StatelessWidget {
       delegate: _StickyTabBarDelegate(
         TabBar(
           controller: tabController,
-          tabs: const [
-            Tab(text: "တရားတော်များ"),
-            Tab(text: "Album အကြောင်း"),
-          ],
+          tabs: const [Tab(text: "တရားတော်များ"), Tab(text: "Album အကြောင်း")],
           indicatorColor: theme.colorScheme.primary,
           labelColor: theme.textTheme.bodyLarge?.color,
-          unselectedLabelColor: theme.textTheme.bodyLarge?.color?.withAlpha(153),
+          unselectedLabelColor: theme.textTheme.bodyLarge?.color?.withAlpha(
+            153,
+          ),
         ),
-        backgroundColor: theme.appBarTheme.backgroundColor ?? theme.colorScheme.surface,
+        backgroundColor:
+            theme.appBarTheme.backgroundColor ?? theme.colorScheme.surface,
       ),
     );
   }
@@ -44,13 +41,15 @@ class _StickyTabBarDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => tabBar.preferredSize.height;
 
   @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: backgroundColor,
-      child: tabBar,
-    );
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return Container(color: backgroundColor, child: tabBar);
   }
 
   @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => false;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      false;
 }

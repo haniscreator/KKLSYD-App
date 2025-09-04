@@ -41,9 +41,11 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
           id: widget.audioUrl,
           album: "Dhamma Talks",
           title: widget.title,
-          artUri: Uri.parse(widget.image.startsWith('http')
-              ? widget.image
-              : 'https://dummyimage.com/300.png/09f/fff'), // fallback if local
+          artUri: Uri.parse(
+            widget.image.startsWith('http')
+                ? widget.image
+                : 'https://dummyimage.com/300.png/09f/fff',
+          ), // fallback if local
         ),
       ),
     );
@@ -99,23 +101,27 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: widget.image.startsWith('http')
-                  ? Image.network(
-                      widget.image,
-                      height: 250,
-                      width: 250,
-                      fit: BoxFit.cover,
-                    )
-                  : Image.asset(
-                      widget.image,
-                      height: 250,
-                      width: 250,
-                      fit: BoxFit.cover,
-                    ),
+              child:
+                  widget.image.startsWith('http')
+                      ? Image.network(
+                        widget.image,
+                        height: 250,
+                        width: 250,
+                        fit: BoxFit.cover,
+                      )
+                      : Image.asset(
+                        widget.image,
+                        height: 250,
+                        width: 250,
+                        fit: BoxFit.cover,
+                      ),
             ),
             const SizedBox(height: 24),
             Slider(
-              value: _position.inSeconds.toDouble().clamp(0.0, _duration.inSeconds.toDouble()),
+              value: _position.inSeconds.toDouble().clamp(
+                0.0,
+                _duration.inSeconds.toDouble(),
+              ),
               min: 0,
               max: _duration.inSeconds.toDouble(),
               onChanged: (value) {

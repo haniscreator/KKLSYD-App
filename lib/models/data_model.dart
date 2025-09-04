@@ -29,7 +29,7 @@ List<PopularPlaces> popularPlace = [
     category: 'popular',
     image: [
       'assets/images/thumbnail/album_cover.png',
-      
+
       'assets/images/doi_suthet/2.jpg',
       'assets/images/doi_suthet/3.jpg',
     ],
@@ -37,7 +37,8 @@ List<PopularPlaces> popularPlace = [
     rate: 4.8,
     review: random.nextInt(300) + 25,
     price: 1000,
-    description: "Wat Phra That Doi Suthep is a sacred temple perched atop Doi Suthep mountain, offering panoramic views of Chiang Mai and a deep cultural experience.",
+    description:
+        "Wat Phra That Doi Suthep is a sacred temple perched atop Doi Suthep mountain, offering panoramic views of Chiang Mai and a deep cultural experience.",
   ),
   PopularPlaces(
     id: 2,
@@ -53,7 +54,8 @@ List<PopularPlaces> popularPlace = [
     rate: 4.7,
     review: random.nextInt(300) + 25,
     price: 1000,
-    description: "The Old City of Chiang Mai is home to numerous ancient temples like Wat Chedi Luang and Wat Phra Singh, rich in history and architecture.",
+    description:
+        "The Old City of Chiang Mai is home to numerous ancient temples like Wat Chedi Luang and Wat Phra Singh, rich in history and architecture.",
   ),
   PopularPlaces(
     id: 3,
@@ -70,8 +72,9 @@ List<PopularPlaces> popularPlace = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 1000,
-    description: "A peaceful urban park in Chiang Mai known for its scenic lake, walking paths, and relaxing atmosphere—perfect for jogging, picnics, and family outings."
-    ),
+    description:
+        "A peaceful urban park in Chiang Mai known for its scenic lake, walking paths, and relaxing atmosphere—perfect for jogging, picnics, and family outings.",
+  ),
   PopularPlaces(
     id: 4,
     name: "Mae Kam Png Village",
@@ -87,8 +90,9 @@ List<PopularPlaces> popularPlace = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 1000,
-    description: "Mae Kampong is a serene mountain village nestled in Chiang Mai's Mae On District, renowned for its lush landscapes, traditional wooden homes, and community-driven eco-tourism. Visitors can enjoy homestays, explore the seven-tier Mae Kampong Waterfall, savor locally grown coffee, and experience the tranquil charm of Northern Thai culture."
-    ),
+    description:
+        "Mae Kampong is a serene mountain village nestled in Chiang Mai's Mae On District, renowned for its lush landscapes, traditional wooden homes, and community-driven eco-tourism. Visitors can enjoy homestays, explore the seven-tier Mae Kampong Waterfall, savor locally grown coffee, and experience the tranquil charm of Northern Thai culture.",
+  ),
   PopularPlaces(
     id: 5,
     name: "Nimmanhaemin Road",
@@ -103,7 +107,8 @@ List<PopularPlaces> popularPlace = [
     rate: 4.5,
     review: random.nextInt(300) + 25,
     price: 1000,
-    description: "Trendy area known for its cafes, art galleries, boutique shops, and nightlife, perfect for modern lifestyle exploration.",
+    description:
+        "Trendy area known for its cafes, art galleries, boutique shops, and nightlife, perfect for modern lifestyle exploration.",
   ),
   PopularPlaces(
     id: 6,
@@ -119,23 +124,16 @@ List<PopularPlaces> popularPlace = [
     rate: 4.6,
     review: random.nextInt(300) + 25,
     price: 1000,
-    description: "A vibrant night market offering local food, souvenirs, crafts, and live entertainment, showcasing Chiang Mai’s lively street culture.",
+    description:
+        "A vibrant night market offering local food, souvenirs, crafts, and live entertainment, showcasing Chiang Mai’s lively street culture.",
   ),
 ];
-
 
 ////  //// ///  ///
 /// For Package ///
 ////  //// ///  ///
 
-
-List<String> categories = [
-  'Popular',
-  'Budget',
-  'Luxury',
-  'Recommend',
-];
-
+List<String> categories = ['Popular', 'Budget', 'Luxury', 'Recommend'];
 
 class AllPackages {
   final int id, price, review;
@@ -171,7 +169,8 @@ List<AllPackages> allPackage = [
     rate: 4.8,
     review: random.nextInt(300) + 25,
     price: 650,
-    description: "Explore historic temples, local markets, and the charming streets of Chiang Mai’s Old City on this guided tour.",
+    description:
+        "Explore historic temples, local markets, and the charming streets of Chiang Mai’s Old City on this guided tour.",
   ),
   AllPackages(
     id: 2,
@@ -187,7 +186,8 @@ List<AllPackages> allPackage = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 750,
-    description: "Hike up Doi Suthep in the early morning and witness the stunning sunrise over Chiang Mai from the sacred temple viewpoint.",
+    description:
+        "Hike up Doi Suthep in the early morning and witness the stunning sunrise over Chiang Mai from the sacred temple viewpoint.",
   ),
   AllPackages(
     id: 3,
@@ -203,7 +203,8 @@ List<AllPackages> allPackage = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 1200,
-    description: "Spend a day at an ethical elephant sanctuary learning about and interacting with these gentle giants in their natural habitat.",
+    description:
+        "Spend a day at an ethical elephant sanctuary learning about and interacting with these gentle giants in their natural habitat.",
   ),
   AllPackages(
     id: 4,
@@ -219,7 +220,8 @@ List<AllPackages> allPackage = [
     rate: 4.7,
     review: random.nextInt(300) + 25,
     price: 950,
-    description: "Visit Thailand’s highest peak, beautiful waterfalls, and twin royal pagodas in Doi Inthanon National Park.",
+    description:
+        "Visit Thailand’s highest peak, beautiful waterfalls, and twin royal pagodas in Doi Inthanon National Park.",
   ),
   AllPackages(
     id: 5,
@@ -235,7 +237,8 @@ List<AllPackages> allPackage = [
     rate: 4.8,
     review: random.nextInt(300) + 25,
     price: 850,
-    description: "Experience a peaceful day in Mae Kampong village with traditional Thai culture, local food, and scenic views.",
+    description:
+        "Experience a peaceful day in Mae Kampong village with traditional Thai culture, local food, and scenic views.",
   ),
   AllPackages(
     id: 6,
@@ -250,7 +253,8 @@ List<AllPackages> allPackage = [
     rate: 4.6,
     review: random.nextInt(300) + 25,
     price: 700,
-    description: "Join an exciting tram ride through the Chiang Mai Night Safari and observe nocturnal animals in a natural environment.",
+    description:
+        "Join an exciting tram ride through the Chiang Mai Night Safari and observe nocturnal animals in a natural environment.",
   ),
   AllPackages(
     id: 7,
@@ -265,7 +269,8 @@ List<AllPackages> allPackage = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 950,
-    description: "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
+    description:
+        "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
   ),
   AllPackages(
     id: 8,
@@ -280,7 +285,8 @@ List<AllPackages> allPackage = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 950,
-    description: "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
+    description:
+        "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
   ),
   AllPackages(
     id: 9,
@@ -295,7 +301,8 @@ List<AllPackages> allPackage = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 950,
-    description: "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
+    description:
+        "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
   ),
   AllPackages(
     id: 10,
@@ -310,7 +317,8 @@ List<AllPackages> allPackage = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 950,
-    description: "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
+    description:
+        "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
   ),
   AllPackages(
     id: 11,
@@ -325,7 +333,8 @@ List<AllPackages> allPackage = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 950,
-    description: "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
+    description:
+        "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
   ),
   AllPackages(
     id: 12,
@@ -340,7 +349,8 @@ List<AllPackages> allPackage = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 950,
-    description: "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
+    description:
+        "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
   ),
   AllPackages(
     id: 13,
@@ -355,7 +365,8 @@ List<AllPackages> allPackage = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 950,
-    description: "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
+    description:
+        "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
   ),
   AllPackages(
     id: 14,
@@ -370,7 +381,8 @@ List<AllPackages> allPackage = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 950,
-    description: "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
+    description:
+        "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
   ),
   AllPackages(
     id: 15,
@@ -385,7 +397,8 @@ List<AllPackages> allPackage = [
     rate: 4.9,
     review: random.nextInt(300) + 25,
     price: 950,
-    description: "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
+    description:
+        "Experience the beauty, culture, and nature of Northern Thailand with guided tours through iconic destinations like Chiang Mai, Pai, and Chiang Rai.",
   ),
 ];
 
@@ -393,17 +406,12 @@ List<AllPackages> allPackage = [
 /// For Review ///
 ////  //// /// ///
 
-
 class Review {
   final String name;
   final String comment;
   final String photo;
 
-  Review({
-    required this.name,
-    required this.comment,
-    required this.photo,
-  });
+  Review({required this.name, required this.comment, required this.photo});
 }
 
 List<Review> userReviews = [
@@ -434,7 +442,6 @@ List<Review> userReviews = [
   ),
 ];
 
-
 ////  //// /// /// ///
 /// For Onboarding ///
 ////  //// /// /// ///
@@ -443,38 +450,32 @@ class OnboardModel {
   String image, title, description;
 
   OnboardModel({
-    required this.image, 
+    required this.image,
     required this.title,
-    required this.description
-    });
+    required this.description,
+  });
 }
 
 List<OnboardModel> onboarding = [
-   
-   OnboardModel(
+  OnboardModel(
     image: 'assets/images/splash_bg.png',
     title: 'ဗုဒ္ဓံပူဇေမိ',
-    description: 'Take only memories, leave only footprints behind.'
+    description: 'Take only memories, leave only footprints behind.',
   ),
-   
-   OnboardModel(
+
+  OnboardModel(
     image: 'assets/images/splash_bg.png',
     title: 'ဗုဒ္ဓသာသနံ',
-    description: 'Travel is the only thing you buy that makes you richer. '
+    description: 'Travel is the only thing you buy that makes you richer. ',
   ),
   OnboardModel(
     image: 'assets/images/splash_bg.png',
     title: "စိရံတိဌတု",
-    description: 'Life begins at the end of your comfort zone.'
+    description: 'Life begins at the end of your comfort zone.',
   ),
-  
- 
-
-  
 ];
 
-
-////  //// /// /// 
+////  //// /// ///
 /// City List  ///
 ////  //// /// ///
 
@@ -487,8 +488,3 @@ const List<String> cityList = [
 ];
 
 String defaultCity = cityList[0];
-
-
-
-
-

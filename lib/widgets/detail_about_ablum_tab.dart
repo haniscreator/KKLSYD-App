@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 class AboutAlbumTab extends StatelessWidget {
   final String description; // ✅ add this
 
@@ -36,5 +34,3 @@ class AboutAlbumTab extends StatelessWidget {
     );
   }
 }
-
-

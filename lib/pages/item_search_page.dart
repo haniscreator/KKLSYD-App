@@ -40,19 +40,18 @@ class _ItemSearchPageState extends ConsumerState<ItemSearchPage> {
                 final items = <DropdownMenuItem<int>>[
                   const DropdownMenuItem(value: 0, child: Text("All Albums")),
                   ...albums.map(
-                    (Album a) => DropdownMenuItem(
-                      value: a.id,
-                      child: Text(a.name),
-                    ),
+                    (Album a) =>
+                        DropdownMenuItem(value: a.id, child: Text(a.name)),
                   ),
                 ];
 
                 // If current selected id isn't in list (edge case), default to 0
-                final currentValue = (selectedAlbumId != null &&
-                        (selectedAlbumId == 0 ||
-                            albums.any((a) => a.id == selectedAlbumId)))
-                    ? selectedAlbumId
-                    : 0;
+                final currentValue =
+                    (selectedAlbumId != null &&
+                            (selectedAlbumId == 0 ||
+                                albums.any((a) => a.id == selectedAlbumId)))
+                        ? selectedAlbumId
+                        : 0;
 
                 return DropdownButtonFormField<int>(
                   decoration: const InputDecoration(labelText: "Album"),
@@ -64,25 +63,29 @@ class _ItemSearchPageState extends ConsumerState<ItemSearchPage> {
                       if (selectedAlbumId == 0) {
                         selectedAlbumName = null;
                       } else {
-                        final found = albums.firstWhere((a) => a.id == selectedAlbumId);
+                        final found = albums.firstWhere(
+                          (a) => a.id == selectedAlbumId,
+                        );
                         selectedAlbumName = found.name;
                       }
                     });
                   },
                 );
               },
-              loading: () => const Align(
-                alignment: Alignment.centerLeft,
-                child: SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
-              ),
-              error: (err, stack) => Align(
-                alignment: Alignment.centerLeft,
-                child: Text("Album load error: $err"),
-              ),
+              loading:
+                  () => const Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      height: 24,
+                      width: 24,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    ),
+                  ),
+              error:
+                  (err, stack) => Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Album load error: $err"),
+                  ),
             ),
 
             const SizedBox(height: 16),
@@ -98,7 +101,9 @@ class _ItemSearchPageState extends ConsumerState<ItemSearchPage> {
 
             // Sorting
             DropdownButtonFormField<String>(
-              decoration: const InputDecoration(labelText: "Sort By Created At"),
+              decoration: const InputDecoration(
+                labelText: "Sort By Created At",
+              ),
               value: orderDir,
               items: const [
                 DropdownMenuItem(value: "desc", child: Text("Descending")),
@@ -124,9 +129,12 @@ class _ItemSearchPageState extends ConsumerState<ItemSearchPage> {
                 // Apply search
                 ElevatedButton(
                   onPressed: () {
-                    ref.read(itemListProvider.notifier).setFilters(
+                    ref
+                        .read(itemListProvider.notifier)
+                        .setFilters(
                           albumId: selectedAlbumId ?? 0,
-                          albumName: selectedAlbumId == 0 ? null : selectedAlbumName,
+                          albumName:
+                              selectedAlbumId == 0 ? null : selectedAlbumName,
                           searchTerm: keyword,
                           orderDir: orderDir,
                         );
