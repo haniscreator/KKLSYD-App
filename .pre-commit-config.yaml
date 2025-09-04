@@ -6,3 +6,9 @@ repos:
         entry: dart format --set-exit-if-changed .
         language: system
         files: \.dart$ 
+
+      - id: dart-fix
+        name: Dart Fix
+        entry: dart fix --apply
+        language: system
+        files: \.dart$
