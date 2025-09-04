@@ -22,7 +22,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   Future<void> _navigate() async {
     final seenOnboarding = await OnBoardingService.hasSeenOnboarding();
 
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 10), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -39,7 +39,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/splash_bg.png'),
+            image: AssetImage('assets/images/splash_bg_3.png'),
             fit: BoxFit.cover, // fills the screen
           ),
         ),

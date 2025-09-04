@@ -18,7 +18,7 @@ class HomeAlbumCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 🔑 Give fixed height in vertical list mode
+    // 🔑 Fixed height in vertical list mode
     final double cardHeight = fullWidth ? 230 : 230;
     final double cardWidth = fullWidth ? double.infinity : 320;
 
@@ -40,16 +40,46 @@ class HomeAlbumCard extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(16),
           child: Stack(
-            fit: StackFit.expand, // ✅ now bounded by SizedBox
+            fit: StackFit.expand,
             children: [
               // Cover image
               PopInCardImages(
                 imagePath: album.coverImage,
-                isNetwork: true,
+                isNetwork: false,
                 delay: const Duration(milliseconds: 150),
               ),
 
-              // Overlay
+              // Album name (centered, with white bg + shadow for readability)
+              Center(
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    album.name,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: cardTitleFontSize,
+                      fontWeight: FontWeight.bold,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(1, 1),
+                          blurRadius: 3,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              // Gradient overlay at bottom (location + music stacked)
               Positioned(
                 bottom: 0,
                 right: 0,
@@ -72,49 +102,46 @@ class HomeAlbumCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        album.name,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: commonWhiteColor,
-                          fontSize: cardTitleFontSize,
-                        ),
-                      ),
+                      // Location row
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              const Icon(Icons.location_on,
-                                  color: commonWhiteColor,
-                                  size: normalTextFontSize),
-                              const SizedBox(width: 4),
-                              Text(
-                                album.location,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: commonWhiteColor,
-                                  fontSize: normalTextFontSize,
-                                ),
-                              ),
-                            ],
+                          const Icon(
+                            Icons.location_on,
+                            color: commonWhiteColor,
+                            size: 20,
                           ),
-                          Row(
-                            children: [
-                              const Icon(Icons.library_music,
-                                  size: 22, color: Colors.white),
-                              const SizedBox(width: 5),
-                              Text(
-                                "${album.itemCount}",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: commonWhiteColor,
-                                ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              album.location,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: commonWhiteColor,
+                                fontSize: normalTextFontSize,
                               ),
-                            ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 4),
+
+                      // Music count row
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.library_music,
+                            size: 20,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 5),
+                          Text(
+                            "${album.itemCount}",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: commonWhiteColor,
+                            ),
                           ),
                         ],
                       ),
