@@ -23,7 +23,7 @@ class ItemService {
 
     final st = (searchTerm ?? '').trim();
     final base =
-        'items_album_${albumId}_page${page}_pp${perPage}_ob${orderBy}_od${orderDir}_st${st}';
+        'items_album_${albumId}_page${page}_pp${perPage}_ob${orderBy}_od${orderDir}_st$st';
     final dataKey = '${base}_data';
     final tsKey = '${base}_ts';
 

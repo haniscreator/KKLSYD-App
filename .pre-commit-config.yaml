@@ -5,10 +5,10 @@ repos:
         name: Dart Format
         entry: dart format --set-exit-if-changed .
         language: system
-        files: \.dart$ 
+        files: \.dart$
 
       - id: dart-fix
         name: Dart Fix
-        entry: dart fix --apply
+        entry: dart fix --apply .
         language: system
-        files: \.dart$
+        pass_filenames: false

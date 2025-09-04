@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:kklsyd_app/const/const.dart';
-import 'package:kklsyd_app/models/item.dart';
 import 'package:kklsyd_app/pages/item_list_page.dart';
 import 'package:kklsyd_app/providers/item_providers.dart';
 import 'package:kklsyd_app/services/item_service.dart';

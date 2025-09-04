@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kklsyd_app/models/album.dart'; // ✅ New API model
+import 'package:kklsyd_app/models/album.dart';
 import 'package:kklsyd_app/widgets/detail_overview_tab.dart';
-
 import 'package:kklsyd_app/widgets/detail_album_tab_bar.dart';
 import 'package:kklsyd_app/widgets/detail_about_ablum_tab.dart';
 import 'package:kklsyd_app/Config/config.dart';

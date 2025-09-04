@@ -33,9 +33,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       final results = await Connectivity().checkConnectivity();
       // ⚠️ If results is a list, take the first item (or default to none)
       final result =
-          (results is List<ConnectivityResult> && results.isNotEmpty)
-              ? results.first
-              : ConnectivityResult.none;
+          (results.isNotEmpty) ? results.first : ConnectivityResult.none;
 
       setState(() {
         _connectivityResult = result;

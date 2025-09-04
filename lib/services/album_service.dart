@@ -15,7 +15,7 @@ class AlbumService {
     final prefs = await SharedPreferences.getInstance();
 
     // Cache key and timestamp key
-    String cacheKey = 'albums_cache_page_${page}_per_${perPage}';
+    String cacheKey = 'albums_cache_page_${page}_per_$perPage';
     String tsKey = '${cacheKey}_ts';
     if (searchTerm != null && searchTerm.isNotEmpty) {
       cacheKey += '_search_${searchTerm.toLowerCase()}';

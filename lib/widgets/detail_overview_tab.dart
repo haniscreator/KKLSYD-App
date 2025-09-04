@@ -5,7 +5,6 @@ import 'package:kklsyd_app/const/const.dart';
 import 'package:kklsyd_app/pages/audioplayer_page.dart';
 import 'package:kklsyd_app/Config/config.dart';
 import 'package:kklsyd_app/providers/album_itemslist_providers.dart';
-import 'package:kklsyd_app/models/item.dart';
 
 class DetailItemsListTab extends ConsumerWidget {
   final int albumId;

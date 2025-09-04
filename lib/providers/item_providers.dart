@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -49,10 +48,7 @@ class ItemListState {
       page: page ?? this.page,
       searchTerm: searchTerm ?? this.searchTerm,
       albumId: albumId ?? this.albumId,
-      albumName:
-          albumName != null
-              ? albumName
-              : (albumId == 0 ? null : this.albumName),
+      albumName: albumName ?? (albumId == 0 ? null : this.albumName),
       orderDir: orderDir ?? this.orderDir,
       hasConnection: hasConnection ?? this.hasConnection,
     );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:kklsyd_app/models/album.dart';
 import 'package:kklsyd_app/pages/album_list_page.dart';
 import 'package:kklsyd_app/providers/album_providers.dart';
 import 'package:kklsyd_app/services/album_service.dart';
@@ -58,8 +57,9 @@ class HomeAlbumSection extends ConsumerWidget {
           height: 210,
           child: asyncAlbums.when(
             data: (albums) {
-              if (albums.isEmpty)
+              if (albums.isEmpty) {
                 return const Center(child: Text("No albums found"));
+              }
 
               return RefreshIndicator(
                 onRefresh: () async {
