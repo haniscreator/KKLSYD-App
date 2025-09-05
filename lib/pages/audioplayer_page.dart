@@ -7,11 +7,13 @@ class AudioPlayerPage extends StatefulWidget {
   final String audioUrl;
   final String title;
   final String image;
+  final String description;
 
   const AudioPlayerPage({
     required this.audioUrl,
     required this.title,
     required this.image,
+    required this.description,
     super.key,
   });
 
@@ -45,7 +47,7 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
             widget.image.startsWith('http')
                 ? widget.image
                 : 'https://dummyimage.com/300.png/09f/fff',
-          ), // fallback if local
+          ),
         ),
       ),
     );
@@ -83,16 +85,19 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: colors.surface,
       appBar: AppBar(
         title: Text(
           widget.title,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(color: Colors.black),
+          style: TextStyle(color: colors.onSurface),
         ),
-        leading: const BackButton(color: Colors.black),
-        backgroundColor: Colors.white,
+        leading: BackButton(color: colors.onSurface),
+        backgroundColor: colors.surface,
         elevation: 0,
       ),
       body: Padding(
@@ -116,8 +121,25 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                         fit: BoxFit.cover,
                       ),
             ),
+
+            const SizedBox(height: 16),
+
+            // ✅ Description text under the image
+            Text(
+              widget.description,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                color: colors.onSurface.withOpacity(0.8),
+              ),
+            ),
+
             const SizedBox(height: 24),
+
+            // Slider
             Slider(
+              activeColor: colors.primary,
+              inactiveColor: colors.primary.withOpacity(0.3),
               value: _position.inSeconds.toDouble().clamp(
                 0.0,
                 _duration.inSeconds.toDouble(),
@@ -132,47 +154,76 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(_formatDuration(_position)),
-                Text(_formatDuration(_duration)),
+                Text(
+                  _formatDuration(_position),
+                  style: TextStyle(color: colors.onSurface),
+                ),
+                Text(
+                  _formatDuration(_duration),
+                  style: TextStyle(color: colors.onSurface),
+                ),
               ],
             ),
             const SizedBox(height: 24),
+
+            // Controls with labels
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.replay_10),
-                  iconSize: 40,
-                  onPressed: _skipBackward,
+                _controlButton(
+                  icon: Icons.replay_10,
+                  label: "Rewind",
+                  onTap: _skipBackward,
                 ),
-                const SizedBox(width: 20),
+                const SizedBox(width: 32),
                 StreamBuilder<bool>(
                   stream: _player.playingStream,
                   builder: (context, snapshot) {
                     final isPlaying = snapshot.data ?? false;
-                    return IconButton(
-                      icon: Icon(
-                        isPlaying ? Icons.pause_circle : Icons.play_circle,
-                        color: Colors.blue,
-                      ),
-                      iconSize: 64,
-                      onPressed: () {
+                    return _controlButton(
+                      icon: isPlaying ? Icons.pause_circle : Icons.play_circle,
+                      label: isPlaying ? "Pause" : "Play",
+                      color: colors.primary,
+                      size: 64,
+                      onTap: () {
                         isPlaying ? _player.pause() : _player.play();
                       },
                     );
                   },
                 ),
-                const SizedBox(width: 20),
-                IconButton(
-                  icon: const Icon(Icons.forward_10),
-                  iconSize: 40,
-                  onPressed: _skipForward,
+                const SizedBox(width: 32),
+                _controlButton(
+                  icon: Icons.forward_10,
+                  label: "Forward",
+                  onTap: _skipForward,
                 ),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _controlButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    Color? color,
+    double size = 40,
+  }) {
+    final theme = Theme.of(context);
+    final colors = theme.colorScheme;
+
+    return Column(
+      children: [
+        IconButton(
+          icon: Icon(icon, color: color ?? colors.onSurface),
+          iconSize: size,
+          onPressed: onTap,
+        ),
+        Text(label, style: TextStyle(color: colors.onSurface, fontSize: 12)),
+      ],
     );
   }
 }

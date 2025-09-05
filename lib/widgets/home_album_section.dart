@@ -26,7 +26,7 @@ class HomeAlbumSection extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Album များ",
+                txtLatestAlbumHome_MM,
                 style: TextStyle(
                   fontSize: sectionTitleFontSize,
                   fontWeight: textFontWeight,
@@ -40,12 +40,15 @@ class HomeAlbumSection extends ConsumerWidget {
                     MaterialPageRoute(builder: (_) => const AlbumListPage()),
                   );
                 },
-                child: Text(
-                  "See All",
-                  style: TextStyle(
-                    fontSize: smallTextFontSize,
-                    color: isDark ? Colors.teal[200] : Colors.teal,
-                  ),
+                child: Icon(
+                  Icons
+                      .arrow_forward_ios, // 👈 you can change this to any Material icon
+                  size:
+                      smallTextFontSize + 2, // keep proportions similar to text
+                  color:
+                      isDark
+                          ? commonActionTextColorDark
+                          : commonActionTextColor,
                 ),
               ),
             ],

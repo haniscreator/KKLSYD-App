@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kklsyd_app/const/const.dart';
 import 'package:kklsyd_app/models/album.dart';
 import 'package:kklsyd_app/services/album_service.dart';
 import 'package:kklsyd_app/widgets/home_album_card.dart';
@@ -187,13 +188,13 @@ class _AlbumListPageState extends ConsumerState<AlbumListPage> {
                   controller: _searchController,
                   autofocus: true,
                   decoration: const InputDecoration(
-                    hintText: "Search albums...",
+                    hintText: txtSearchHint_MM,
                     border: InputBorder.none,
                   ),
                   onChanged: _onSearchChanged,
                   onSubmitted: _onSearchChanged,
                 )
-                : const Text('Albums'),
+                : const Text(txtLatestAlbumHome_MM),
         actions: [
           _isSearching
               ? IconButton(
@@ -256,7 +257,7 @@ class _AlbumListPageState extends ConsumerState<AlbumListPage> {
                     ),
                     const SizedBox(height: 16),
                     const Text(
-                      "အင်တာနက် ချိတ်ဆက်မှုမရှိပါ",
+                      txtGeneralNoInternet_MM,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
@@ -269,7 +270,7 @@ class _AlbumListPageState extends ConsumerState<AlbumListPage> {
                             .read(albumListProvider.notifier)
                             .fetchAlbums(refresh: true);
                       },
-                      child: const Text("ထပ်စမ်းကြည့်ပါ"),
+                      child: const Text(txtTryAgain_MM),
                     ),
                   ],
                 ),

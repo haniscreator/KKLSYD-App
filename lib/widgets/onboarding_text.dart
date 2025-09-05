@@ -27,9 +27,9 @@ class OnboardingText extends StatelessWidget {
                   onboarding[currentIndex].title,
                   style: const TextStyle(
                     fontSize: 48,
-                    color: Colors.white, // main text
+                    color: Colors.black26, // main text
                     fontWeight: FontWeight.bold,
-                    height: 1.2,
+                    //height: 1.2,
                   ),
                 ),
               ],

@@ -7,7 +7,8 @@ class GlowAvatar extends StatefulWidget {
   const GlowAvatar({
     super.key,
     this.radius = 20, // default smaller for AppBar
-    this.imagePath = 'assets/images/avatar.jpg',
+    //this.imagePath = 'assets/images/avatar.jpg',
+    this.imagePath = 'assets/images/thumbnail/thumbnail.png',
   });
 
   @override

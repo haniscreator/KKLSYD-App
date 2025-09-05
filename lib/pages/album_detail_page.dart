@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kklsyd_app/const/const.dart';
 import 'package:kklsyd_app/models/album.dart';
 import 'package:kklsyd_app/widgets/detail_overview_tab.dart';
 import 'package:kklsyd_app/widgets/detail_album_tab_bar.dart';
@@ -58,7 +59,7 @@ class _AlbumDetailPageState extends State<AlbumDetailPage>
                   icon: const Icon(Icons.arrow_back),
                   onPressed: () => Navigator.pop(context),
                 ),
-                title: Text("Album Details"),
+                title: Text(txtTitleAlbumDetails_MM),
               ),
               SliverToBoxAdapter(
                 child: Padding(
@@ -96,10 +97,6 @@ class _AlbumDetailPageState extends State<AlbumDetailPage>
                               horizontal: 12,
                               vertical: 6,
                             ),
-                            // decoration: BoxDecoration(
-                            //   color: Colors.white.withOpacity(0.8),
-                            //   borderRadius: BorderRadius.circular(8),
-                            // ),
                             child: Text(
                               widget.album.name,
                               textAlign: TextAlign.center,

@@ -47,7 +47,7 @@ class OnboardingBottomPanel extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                       boxShadow: [
                         BoxShadow(
-                          color: isDark ? Colors.black45 : Colors.black26,
+                          color: isDark ? Colors.white54 : Colors.white24,
                           offset: const Offset(0, 5),
                           spreadRadius: 5,
                           blurRadius: 10,
@@ -55,20 +55,23 @@ class OnboardingBottomPanel extends StatelessWidget {
                       ],
                       color: commonBlackColor,
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Let's Get Started",
+                            txtOnboardingStart_EN,
                             style: TextStyle(
                               fontSize: 18,
-                              color: Colors.white,
+                              color:
+                                  isDark
+                                      ? commonActionTextColorDark
+                                      : commonActionTextColor,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(width: 5),
-                          Icon(
+                          const SizedBox(width: 5),
+                          const Icon(
                             Icons.arrow_forward,
                             color: Colors.white,
                             size: 22,

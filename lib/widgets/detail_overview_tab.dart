@@ -54,7 +54,7 @@ class DetailItemsListTab extends ConsumerWidget {
                           ),
                           const SizedBox(height: 16),
                           const Text(
-                            "အင်တာနက် ချိတ်ဆက်ထားခြင်း မရှိပါ။\nPull down to retry.",
+                            txtGeneralNoInternetPullDown_MM,
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -72,7 +72,7 @@ class DetailItemsListTab extends ConsumerWidget {
                   if (items.isEmpty) {
                     return const Padding(
                       padding: EdgeInsets.all(20),
-                      child: Center(child: Text("တရားတော်များ မရှိသေးပါ။")),
+                      child: Center(child: Text(txtNoData_MM)),
                     );
                   }
                   return Column(
@@ -80,7 +80,7 @@ class DetailItemsListTab extends ConsumerWidget {
                       final item = items[index];
                       return AlbumPlayListTile(
                         name: item.name,
-                        comment: item.description,
+                        description: item.description,
                         photo: "assets/images/thumbnail/thumbnail5.png",
                         mediaUrl: AppConfig.storageUrl + item.mediaUrl,
                       );
@@ -98,14 +98,14 @@ class DetailItemsListTab extends ConsumerWidget {
 
 class AlbumPlayListTile extends StatelessWidget {
   final String name;
-  final String comment;
+  final String description;
   final String photo;
   final String mediaUrl;
 
   const AlbumPlayListTile({
     super.key,
     required this.name,
-    required this.comment,
+    required this.description,
     required this.photo,
     required this.mediaUrl,
   });
@@ -124,6 +124,7 @@ class AlbumPlayListTile extends StatelessWidget {
                     audioUrl: mediaUrl,
                     title: name,
                     image: 'assets/images/thumbnail/thumbnail5.png',
+                    description: description,
                   ),
             ),
           );
@@ -134,7 +135,11 @@ class AlbumPlayListTile extends StatelessWidget {
           child: Image.asset(photo, width: 50, height: 50, fit: BoxFit.cover),
         ),
         title: Text(name),
-        subtitle: Text(comment, maxLines: 2, overflow: TextOverflow.ellipsis),
+        subtitle: Text(
+          description,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
         trailing: Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(

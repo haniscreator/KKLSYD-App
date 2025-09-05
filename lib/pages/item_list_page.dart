@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:kklsyd_app/Config/config.dart';
+import 'package:kklsyd_app/const/const.dart';
 import 'package:lottie/lottie.dart';
 import '../models/item.dart';
 import '../providers/item_providers.dart';
@@ -76,13 +77,13 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
             ),
             const SizedBox(height: 16),
             const Text(
-              "အင်တာနက် ချိတ်ဆက်မှုမရှိပါ",
+              txtGeneralNoInternet_MM,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () => notifier.fetchItems(refresh: true),
-              child: const Text("ထပ်စမ်းကြည့်ပါ"),
+              child: const Text(txtTryAgain_MM),
             ),
           ],
         ),
@@ -139,6 +140,7 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
                               audioUrl: fullAudioUrl, // ✅ full URL
                               title: item.name,
                               image: 'assets/images/thumbnail/thumbnail5.png',
+                              description: item.description,
                             ),
                       ),
                     );

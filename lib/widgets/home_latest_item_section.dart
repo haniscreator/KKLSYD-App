@@ -27,7 +27,7 @@ class HomeLatestItemSection extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "နောက်ဆုံးထွက် Items များ",
+                txtLatestItemsHome_MM,
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontSize: sectionTitleFontSize,
                   fontWeight: textFontWeight,
@@ -40,12 +40,15 @@ class HomeLatestItemSection extends ConsumerWidget {
                     MaterialPageRoute(builder: (_) => const ItemListPage()),
                   );
                 },
-                child: Text(
-                  "See All",
-                  style: TextStyle(
-                    fontSize: smallTextFontSize,
-                    color: isDark ? Colors.lightBlue[200] : Colors.blue,
-                  ),
+                child: Icon(
+                  Icons
+                      .arrow_forward_ios, // 👈 you can change this to any Material icon
+                  size:
+                      smallTextFontSize + 2, // keep proportions similar to text
+                  color:
+                      isDark
+                          ? commonActionTextColorDark
+                          : commonActionTextColor,
                 ),
               ),
             ],
@@ -72,7 +75,7 @@ class HomeLatestItemSection extends ConsumerWidget {
             if (items.isEmpty) {
               return const Padding(
                 padding: EdgeInsets.all(16),
-                child: Text("တရားတော်များ မရှိသေးပါ။"),
+                child: Text(txtNoData_MM),
               );
             }
 
@@ -118,6 +121,7 @@ class HomeLatestItemSection extends ConsumerWidget {
                                   title: item.name,
                                   image:
                                       'assets/images/thumbnail/thumbnail5.png',
+                                  description: item.description,
                                 ),
                           ),
                         );

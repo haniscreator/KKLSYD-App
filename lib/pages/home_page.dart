@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:kklsyd_app/const/const.dart';
 import 'package:kklsyd_app/providers/album_providers.dart';
 import 'package:kklsyd_app/providers/item_providers.dart';
 import 'package:kklsyd_app/widgets/home_album_section.dart';
@@ -68,13 +69,13 @@ class _HomePageState extends ConsumerState<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'အင်တာနက် ချိတ်ဆက်မှုမရှိပါ',
+                txtGeneralNoInternet_MM,
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _checkConnectivity,
-                child: const Text('ထပ်စမ်းကြည့်ပါ'),
+                child: const Text(txtTryAgain_MM),
               ),
             ],
           ),

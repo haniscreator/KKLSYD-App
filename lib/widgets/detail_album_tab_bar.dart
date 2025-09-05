@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kklsyd_app/const/const.dart';
 
 class DetailAlbumTabBar extends StatelessWidget {
   final TabController tabController;
@@ -14,7 +15,10 @@ class DetailAlbumTabBar extends StatelessWidget {
       delegate: _StickyTabBarDelegate(
         TabBar(
           controller: tabController,
-          tabs: const [Tab(text: "တရားတော်များ"), Tab(text: "Album အကြောင်း")],
+          tabs: const [
+            Tab(text: txtItemTabTitleAlbum_MM),
+            Tab(text: txtAboutTabTitleAlbum_MM),
+          ],
           indicatorColor: theme.colorScheme.primary,
           labelColor: theme.textTheme.bodyLarge?.color,
           unselectedLabelColor: theme.textTheme.bodyLarge?.color?.withAlpha(

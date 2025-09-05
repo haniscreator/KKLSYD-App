@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kklsyd_app/animations/glow_avatar.dart';
+import 'package:kklsyd_app/const/const.dart';
 import 'package:kklsyd_app/widgets/home_theme_icon.dart';
 
 class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
@@ -27,31 +28,39 @@ class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
               padding: const EdgeInsets.all(24.0),
               child: SingleChildScrollView(
                 controller: scrollController,
-                child: Column(
-                  children: const [
-                    // Profile avatar centered
-                    SizedBox(height: 8),
-                    GlowAvatar(radius: 30),
-                    SizedBox(height: 16),
 
-                    // Sample paragraph
-                    Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                      "Vivamus at elit nec nulla efficitur facilisis. "
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                      "Vivamus at elit nec nulla efficitur facilisis.\n "
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                      "Vivamus at elit nec nulla efficitur facilisis. "
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                      "Vivamus at elit nec nulla efficitur facilisis.\n\n "
-                      "Contact Us : "
-                      "09-879999090 \n\n"
-                      "Address : No.1, Yangon Myanmar "
-                      "Curabitur a neque eu neque facilisis luctus.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 14, height: 1.5),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 8),
+
+                    // Avatar stays centered
+                    const GlowAvatar(radius: 50),
+                    const SizedBox(height: 16),
+
+                    // Texts aligned independently
+                    Column(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start, // aligns text left
+                      children: const [
+                        Text(
+                          txtAboutSayarTaw,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 16, height: 1.5),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          txtAddress,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 16, height: 1.5),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          txtPhone,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 16, height: 1.5),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 24),
                   ],
                 ),
               ),
@@ -91,11 +100,11 @@ class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
               mainAxisSize: MainAxisSize.min,
               children: const [
                 Text(
-                  "Welcome back,",
+                  txtAppTitle_MM,
                   style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
                 Text(
-                  "Makenna Donin", // later replace with dynamic data
+                  txtAppSubTitle_MM,
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ],
