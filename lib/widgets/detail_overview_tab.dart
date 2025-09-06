@@ -135,11 +135,11 @@ class AlbumPlayListTile extends StatelessWidget {
           child: Image.asset(photo, width: 50, height: 50, fit: BoxFit.cover),
         ),
         title: Text(name),
-        subtitle: Text(
-          description,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-        ),
+        // subtitle: Text(
+        //   description,
+        //   maxLines: 2,
+        //   overflow: TextOverflow.ellipsis,
+        // ),
         trailing: Container(
           padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(

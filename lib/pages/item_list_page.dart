@@ -166,7 +166,7 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Items"),
+        title: const Text(txtItemTabTitleAlbum_MM),
         actions: [
           Stack(
             clipBehavior: Clip.none,

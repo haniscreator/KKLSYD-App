@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'package:kklsyd_app/const/const.dart';
 
 class AudioPlayerPage extends StatefulWidget {
   final String audioUrl;
@@ -91,10 +92,9 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
     return Scaffold(
       backgroundColor: colors.surface,
       appBar: AppBar(
-        title: Text(
-          widget.title,
+        title: const Text(
+          txtTitlePlayerDetails_MM, // ✅ constant instead of item.name
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(color: colors.onSurface),
         ),
         leading: BackButton(color: colors.onSurface),
         backgroundColor: colors.surface,
@@ -103,40 +103,60 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child:
-                  widget.image.startsWith('http')
-                      ? Image.network(
-                        widget.image,
-                        height: 250,
-                        width: 250,
-                        fit: BoxFit.cover,
-                      )
-                      : Image.asset(
-                        widget.image,
-                        height: 250,
-                        width: 250,
-                        fit: BoxFit.cover,
-                      ),
+            // ✅ Row: Image + Name
+            Row(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child:
+                      widget.image.startsWith('http')
+                          ? Image.network(
+                            widget.image,
+                            height: 120,
+                            width: 120,
+                            fit: BoxFit.cover,
+                          )
+                          : Image.asset(
+                            'assets/images/player.png',
+                            height: 120,
+                            width: 120,
+                            fit: BoxFit.cover,
+                          ),
+                ),
+                const SizedBox(width: 16),
+                // ✅ Name beside the image
+                Expanded(
+                  child: Text(
+                    widget.title,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: colors.onSurface,
+                    ),
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
-            // ✅ Description text under the image
+            // ✅ Description in its own row
             Text(
               widget.description,
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.start,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 color: colors.onSurface.withOpacity(0.8),
               ),
             ),
 
             const SizedBox(height: 24),
 
-            // Slider
+            // 🎵 Slider
             Slider(
               activeColor: colors.primary,
               inactiveColor: colors.primary.withOpacity(0.3),
@@ -166,7 +186,7 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
             ),
             const SizedBox(height: 24),
 
-            // Controls with labels
+            // 🎵 Controls with labels
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
