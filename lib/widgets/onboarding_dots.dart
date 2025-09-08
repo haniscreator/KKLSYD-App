@@ -14,7 +14,7 @@ class OnboardingDots extends StatelessWidget {
       height: 5,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: index == currentIndex ? Colors.white : Colors.white54,
+        color: index == currentIndex ? Colors.black : Colors.black54,
       ),
     );
   }

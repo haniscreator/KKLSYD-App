@@ -66,7 +66,7 @@ class OnboardingBottomPanel extends StatelessWidget {
                               color:
                                   isDark
                                       ? commonActionTextColorDark
-                                      : commonActionTextColor,
+                                      : commonActionTextColorDark,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
