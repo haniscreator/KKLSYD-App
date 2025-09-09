@@ -90,14 +90,14 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
     final colors = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: colors.surface,
+      backgroundColor: colors.surfaceVariant, // ✅ gray like ItemListPage
       appBar: AppBar(
         title: const Text(
-          txtTitlePlayerDetails_MM, // ✅ constant instead of item.name
+          txtTitlePlayerDetails_MM,
           overflow: TextOverflow.ellipsis,
         ),
         leading: BackButton(color: colors.onSurface),
-        backgroundColor: colors.surface,
+        backgroundColor: colors.surface, // ✅ keep AppBar white
         elevation: 0,
       ),
       body: Padding(
@@ -126,7 +126,7 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                           ),
                 ),
                 const SizedBox(width: 16),
-                // ✅ Name beside the image
+                // Name beside the image
                 Expanded(
                   child: Text(
                     widget.title,
@@ -144,7 +144,7 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
 
             const SizedBox(height: 20),
 
-            // ✅ Description in its own row
+            // Description in its own row
             Text(
               widget.description,
               textAlign: TextAlign.start,
