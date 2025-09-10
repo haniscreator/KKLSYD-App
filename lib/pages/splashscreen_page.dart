@@ -39,7 +39,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/splash_bg_3.png'),
+            image: AssetImage('assets/images/splash_bg.png'),
             fit: BoxFit.cover, // fills the screen
           ),
         ),

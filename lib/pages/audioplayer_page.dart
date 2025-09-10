@@ -90,15 +90,17 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
     final colors = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: colors.surfaceVariant, // ✅ gray like ItemListPage
+      backgroundColor:
+          theme.brightness == Brightness.dark
+              ? Colors.black
+              : const Color(0xFFF5F5F5),
       appBar: AppBar(
         title: const Text(
           txtTitlePlayerDetails_MM,
           overflow: TextOverflow.ellipsis,
         ),
         leading: BackButton(color: colors.onSurface),
-        backgroundColor: colors.surface, // ✅ keep AppBar white
-        elevation: 0,
+        elevation: 0, // keep consistent with ItemListPage if you want flat look
       ),
       body: Padding(
         padding: const EdgeInsets.all(24),
@@ -119,7 +121,7 @@ class _AudioPlayerPageState extends State<AudioPlayerPage> {
                             fit: BoxFit.cover,
                           )
                           : Image.asset(
-                            'assets/images/player.png',
+                            "assets/images/thumbnail/thumbnail.png",
                             height: 120,
                             width: 120,
                             fit: BoxFit.cover,

@@ -11,19 +11,19 @@ class OnboardModel {
 
 List<OnboardModel> onboarding = [
   OnboardModel(
-    image: 'assets/images/splash_bg_3.png',
-    title: 'ဗုဒ္ဓံပူဇေမိ',
+    image: 'assets/images/onboarding/1.png',
+    title: '',
     description: '',
   ),
 
   OnboardModel(
-    image: 'assets/images/splash_bg_3.png',
-    title: 'ဗုဒ္ဓသာသနံ',
+    image: 'assets/images/onboarding/2.png',
+    title: '',
     description: '',
   ),
   OnboardModel(
-    image: 'assets/images/splash_bg_3.png',
-    title: "စိရံတိဌတု",
+    image: 'assets/images/onboarding/3.png',
+    title: '',
     description: '',
   ),
 ];

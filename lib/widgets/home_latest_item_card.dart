@@ -77,7 +77,7 @@ class _HomeLatestItemCardState extends State<HomeLatestItemCard>
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.asset(
-                  "assets/images/thumbnail/thumbnail5.png",
+                  "assets/images/thumbnail/thumbnail.png",
                   width: 90,
                   height: 90,
                   fit: BoxFit.cover,

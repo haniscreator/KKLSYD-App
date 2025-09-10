@@ -137,9 +137,10 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
                       MaterialPageRoute(
                         builder:
                             (context) => AudioPlayerPage(
-                              audioUrl: fullAudioUrl, // ✅ full URL
+                              audioUrl: fullAudioUrl, // full URL
                               title: item.name,
-                              image: 'assets/images/thumbnail/thumbnail5.png',
+                              //image: 'assets/images/avatar.png',
+                              image: 'assets/icons/app_icon.png',
                               description: item.description,
                             ),
                       ),

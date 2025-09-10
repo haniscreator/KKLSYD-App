@@ -81,7 +81,7 @@ class DetailItemsListTab extends ConsumerWidget {
                       return AlbumPlayListTile(
                         name: item.name,
                         description: item.description,
-                        photo: "assets/images/thumbnail/thumbnail5.png",
+                        photo: "assets/images/thumbnail/thumbnail.png",
                         mediaUrl: AppConfig.storageUrl + item.mediaUrl,
                       );
                     }),
@@ -123,7 +123,7 @@ class AlbumPlayListTile extends StatelessWidget {
                   (context) => AudioPlayerPage(
                     audioUrl: mediaUrl,
                     title: name,
-                    image: 'assets/images/thumbnail/thumbnail5.png',
+                    image: 'assets/images/thumbnail/thumbnail.png',
                     description: description,
                   ),
             ),

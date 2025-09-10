@@ -43,6 +43,18 @@ class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
                           CrossAxisAlignment.start, // aligns text left
                       children: const [
                         Text(
+                          txtNameMM,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 16, height: 1.5),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          txtNameEN,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 16, height: 1.5),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
                           txtAboutSayarTaw,
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 16, height: 1.5),
