@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -24,7 +25,7 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
   void initState() {
     super.initState();
 
-    // ✅ Check connectivity first
+    // Check connectivity first
     Connectivity().checkConnectivity().then((result) {
       if (result == ConnectivityResult.none) {
         ref.read(itemListProvider.notifier).setNoConnection();
@@ -63,8 +64,14 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
         state.searchTerm.isNotEmpty ||
         state.orderDir != "desc";
 
+    // Debug info to help track why the UI shows empty-state
+    debugPrint(
+      'ItemListPage build: items=${state.items.length}, isLoading=${state.isLoading}, hasConnection=${state.hasConnection}, search="${state.searchTerm}", hasActiveFilters=$hasActiveFilters',
+    );
+
     Widget body;
 
+    // 1) No connection & nothing loaded yet
     if (!state.hasConnection && state.items.isEmpty) {
       body = Center(
         child: Column(
@@ -88,81 +95,148 @@ class _ItemListPageState extends ConsumerState<ItemListPage> {
           ],
         ),
       );
-    } else if (state.isLoading && state.items.isEmpty) {
+    }
+    // 2) Initial loading (spinner) while nothing exists yet
+    else if (state.isLoading && state.items.isEmpty) {
       body = const Center(child: CircularProgressIndicator());
-    } else {
-      body = RefreshIndicator(
-        onRefresh: () => notifier.fetchItems(refresh: true),
-        child: ListView.separated(
-          controller: _scrollController,
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          itemCount:
-              (hasActiveFilters ? 1 : 0) +
-              state.items.length +
-              (state.hasMore || state.isLoading ? 1 : 0),
-          separatorBuilder: (_, __) => const SizedBox(height: 8),
-          itemBuilder: (context, index) {
-            if (hasActiveFilters && index == 0) {
-              return _FilterChipsHeader(
-                albumName: state.albumName,
-                searchTerm: state.searchTerm,
-                orderDir: state.orderDir,
-                onClearAlbum:
-                    () => notifier.setFilters(albumId: 0, albumName: null),
-                onClearKeyword: () => notifier.setFilters(searchTerm: ""),
-                onClearOrder: () => notifier.setFilters(orderDir: "desc"),
-                onResetAll: notifier.resetFilters,
-              );
-            }
+    }
+    // 3) Normal flow (either we have items, or items empty but not loading => show empty UI)
+    else {
+      // If items are empty and not loading -> show "Result Not Found"
+      if (state.items.isEmpty && !state.isLoading) {
+        debugPrint(
+          'Showing empty-result UI (items=0, search="${state.searchTerm}")',
+        );
 
-            final offset = hasActiveFilters ? 1 : 0;
-            final dataIndex = index - offset;
+        final String emptyMessage =
+            state.searchTerm.isNotEmpty
+                ? '$txtNoResult1_MM "${state.searchTerm}".\n$txtNoResult2_MM'
+                : txtNoResult_MM;
 
-            if (dataIndex < state.items.length) {
-              final Item item = state.items[dataIndex];
-              return Padding(
-                key: ValueKey('item_row_${item.id ?? dataIndex}'),
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: InkWell(
-                  onTap: () {
-                    final fullAudioUrl = AppConfig.storageUrl + item.mediaUrl;
-
-                    print(
-                      "Tapped item: ID=${item.id}, name=${item.name}, url=$fullAudioUrl",
-                    );
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => AudioPlayerPage(
-                              audioUrl: fullAudioUrl, // full URL
-                              title: item.name,
-                              //image: 'assets/images/avatar.png',
-                              image: 'assets/icons/app_icon.png',
-                              description: item.description,
-                            ),
-                      ),
-                    );
-                  },
-
-                  child: HomeLatestItemCard(item: item),
+        body = RefreshIndicator(
+          onRefresh: () => notifier.fetchItems(refresh: true),
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            children: [
+              // show filter header so user can clear filters even when empty
+              if (hasActiveFilters)
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
+                  child: _FilterChipsHeader(
+                    albumName: state.albumName,
+                    searchTerm: state.searchTerm,
+                    orderDir: state.orderDir,
+                    onClearAlbum:
+                        () => notifier.setFilters(albumId: 0, albumName: null),
+                    onClearKeyword: () => notifier.setFilters(searchTerm: ""),
+                    onClearOrder: () => notifier.setFilters(orderDir: "desc"),
+                    onResetAll: notifier.resetFilters,
+                  ),
                 ),
-              );
-            }
 
-            if (state.isLoading && dataIndex >= state.items.length) {
-              return const Padding(
-                padding: EdgeInsets.all(16),
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
+              SizedBox(height: MediaQuery.of(context).size.height * 0.16),
+              Center(
+                child: Column(
+                  children: [
+                    Lottie.asset(
+                      'assets/lotties/no_data.json', // provide your empty animation asset
+                      width: 200,
+                      height: 200,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      emptyMessage,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    ElevatedButton(
+                      onPressed: () => notifier.fetchItems(refresh: true),
+                      child: const Text('Refresh'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+      // 4) We have items — show the list (same as before)
+      else {
+        body = RefreshIndicator(
+          onRefresh: () => notifier.fetchItems(refresh: true),
+          child: ListView.separated(
+            controller: _scrollController,
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            itemCount:
+                (hasActiveFilters ? 1 : 0) +
+                state.items.length +
+                (state.hasMore || state.isLoading ? 1 : 0),
+            separatorBuilder: (_, __) => const SizedBox(height: 8),
+            itemBuilder: (context, index) {
+              if (hasActiveFilters && index == 0) {
+                return _FilterChipsHeader(
+                  albumName: state.albumName,
+                  searchTerm: state.searchTerm,
+                  orderDir: state.orderDir,
+                  onClearAlbum:
+                      () => notifier.setFilters(albumId: 0, albumName: null),
+                  onClearKeyword: () => notifier.setFilters(searchTerm: ""),
+                  onClearOrder: () => notifier.setFilters(orderDir: "desc"),
+                  onResetAll: notifier.resetFilters,
+                );
+              }
 
-            return const SizedBox.shrink();
-          },
-        ),
-      );
+              final offset = hasActiveFilters ? 1 : 0;
+              final dataIndex = index - offset;
+
+              if (dataIndex < state.items.length) {
+                final Item item = state.items[dataIndex];
+                return Padding(
+                  key: ValueKey('item_row_${item.id ?? dataIndex}'),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: InkWell(
+                    onTap: () {
+                      final fullAudioUrl = AppConfig.storageUrl + item.mediaUrl;
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => AudioPlayerPage(
+                                audioUrl: fullAudioUrl,
+                                title: item.name,
+                                image: 'assets/icons/app_icon.png',
+                                description: item.description,
+                              ),
+                        ),
+                      );
+                    },
+                    child: HomeLatestItemCard(item: item),
+                  ),
+                );
+              }
+
+              if (state.isLoading && dataIndex >= state.items.length) {
+                return const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              return const SizedBox.shrink();
+            },
+          ),
+        );
+      }
     }
 
     return Scaffold(

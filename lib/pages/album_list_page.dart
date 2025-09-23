@@ -214,36 +214,70 @@ class _AlbumListPageState extends ConsumerState<AlbumListPage> {
                     () => ref
                         .read(albumListProvider.notifier)
                         .fetchAlbums(refresh: true),
-                child: ListView.separated(
-                  controller: _scrollController,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  itemCount:
-                      state.albums.length +
-                      (state.hasMore || state.isLoading ? 1 : 0),
-                  separatorBuilder: (_, __) => const SizedBox(height: 8),
-                  itemBuilder: (context, index) {
-                    if (index < state.albums.length) {
-                      final album = state.albums[index];
-                      return Padding(
-                        key: ValueKey('album_row_${album.id ?? index}'),
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: HomeAlbumCard(
-                          album: album,
-                          useHero: false,
-                          fullWidth: true,
-                          verticalMode: true,
-                          index: index,
+                child:
+                    state.albums.isEmpty && !state.isLoading
+                        ? ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          children: [
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.2,
+                            ),
+                            Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Lottie.asset(
+                                    'assets/lotties/no_data.json',
+                                    width: 200,
+                                    height: 200,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const SizedBox(height: 16),
+                                  const Text(
+                                    txtNoResult_MM,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        )
+                        : ListView.separated(
+                          controller: _scrollController,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          itemCount:
+                              state.albums.length +
+                              (state.hasMore || state.isLoading ? 1 : 0),
+                          separatorBuilder:
+                              (_, __) => const SizedBox(height: 8),
+                          itemBuilder: (context, index) {
+                            if (index < state.albums.length) {
+                              final album = state.albums[index];
+                              return Padding(
+                                key: ValueKey('album_row_${album.id ?? index}'),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
+                                child: HomeAlbumCard(
+                                  album: album,
+                                  useHero: false,
+                                  fullWidth: true,
+                                  verticalMode: true,
+                                  index: index,
+                                ),
+                              );
+                            }
+                            return const Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Center(child: CircularProgressIndicator()),
+                            );
+                          },
                         ),
-                      );
-                    }
-
-                    return const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Center(child: CircularProgressIndicator()),
-                    );
-                  },
-                ),
               )
               : Center(
                 child: Column(
