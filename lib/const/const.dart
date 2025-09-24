@@ -100,6 +100,8 @@ const txtNoResult2_EN = "Please try again.";
 const txtNoResult1_MM = "ရှာလို့မတွေ့ပါ";
 const txtNoResult2_MM = "ထပ်မံရှာကြည့်ပါ။";
 
+const txtVersionNo = "1.0.0 (Beta)";
+
 const String txtAboutSayarTaw =
     "\n နှစ်စဉ် ဝါတွင်းသုံးလ သံဃာတော်များ ဓမ္မကထိကသင်တန်း၊ ဝါပကာလများတွင် လစဉ် (၁၀)ရက်တရားစခန်း (၂)ကြိမ် ကျင်းပပြုလုပ်လျက်ရှိသည်။";
 

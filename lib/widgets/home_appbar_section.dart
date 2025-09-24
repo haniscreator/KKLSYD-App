@@ -4,7 +4,8 @@ import 'package:kklsyd_app/const/const.dart';
 import 'package:kklsyd_app/widgets/home_theme_icon.dart';
 
 class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
-  const HomeAppBarSection({super.key});
+  final VoidCallback onClearCache; // add callback
+  const HomeAppBarSection({super.key, required this.onClearCache});
 
   void _openProfileBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -94,7 +95,7 @@ class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       title: Row(
         children: [
-          // Glow avatar with ripple + tap
+          // Avatar
           Material(
             color: Colors.transparent,
             child: InkWell(
@@ -105,7 +106,7 @@ class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
           ),
           const SizedBox(width: 12),
 
-          // Two-line text
+          // App title
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,7 +128,10 @@ class HomeAppBarSection extends StatelessWidget implements PreferredSizeWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.flash_on, color: Theme.of(context).iconTheme.color),
+              IconButton(
+                icon: const Icon(Icons.flash_on),
+                onPressed: onClearCache, // will override in HomePage
+              ),
               const SizedBox(width: 12),
               const HomeThemeIcon(),
             ],

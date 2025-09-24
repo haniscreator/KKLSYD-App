@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:lottie/lottie.dart';
 import 'package:kklsyd_app/const/const.dart';
 import 'package:kklsyd_app/providers/album_providers.dart';
 import 'package:kklsyd_app/providers/item_providers.dart';
@@ -19,6 +20,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   ConnectivityResult? _connectivityResult;
   bool _checkingConnectivity = true;
 
+  bool _isClearingCache = false; // state for showing Lottie animation
+
   @override
   void initState() {
     super.initState();
@@ -32,7 +35,6 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     try {
       final results = await Connectivity().checkConnectivity();
-      // ⚠️ If results is a list, take the first item (or default to none)
       final result =
           (results.isNotEmpty) ? results.first : ConnectivityResult.none;
 
@@ -55,15 +57,66 @@ class _HomePageState extends ConsumerState<HomePage> {
     ref.refresh(latestItemsProvider);
   }
 
+  Future<void> _clearCacheAndReload() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder:
+          (ctx) => AlertDialog(
+            title: const Text("Clear Cache"),
+            content: const Text("Are you sure you want to clear cache data?"),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text("No"),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text("Yes"),
+              ),
+            ],
+          ),
+    );
+
+    if (confirmed == true) {
+      setState(() => _isClearingCache = true);
+
+      // Clear cache logic here (Hive/SharedPrefs/db)
+      await Future.delayed(const Duration(seconds: 1));
+
+      // Force reload providers
+      ref.invalidate(albumsProvider);
+      ref.invalidate(latestItemsProvider);
+
+      // Wait for reload (simulate API fetching)
+      await Future.delayed(const Duration(seconds: 2));
+
+      setState(() => _isClearingCache = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_isClearingCache) {
+      return Scaffold(
+        backgroundColor: Colors.black.withOpacity(0.7),
+        body: Center(
+          child: Lottie.asset(
+            "assets/lotties/loading.json",
+            width: 200,
+            height: 200,
+            fit: BoxFit.contain,
+          ),
+        ),
+      );
+    }
+
     if (_checkingConnectivity || _connectivityResult == null) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
 
     if (_connectivityResult == ConnectivityResult.none) {
       return Scaffold(
-        appBar: const HomeAppBarSection(),
+        appBar: HomeAppBarSection(onClearCache: _clearCacheAndReload),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -85,7 +138,7 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: const HomeAppBarSection(),
+      appBar: HomeAppBarSection(onClearCache: _clearCacheAndReload),
       body: RefreshIndicator(
         onRefresh: _handleRefresh,
         child: ListView(
